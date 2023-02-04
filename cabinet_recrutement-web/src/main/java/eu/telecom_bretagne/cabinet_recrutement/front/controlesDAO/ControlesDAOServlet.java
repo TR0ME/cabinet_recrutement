@@ -153,7 +153,7 @@ public class ControlesDAOServlet extends HttpServlet {
 
 
         //----------------Test du niveau de qualification ----------------
-       cl = "niveau Qualification";
+        cl = "niveau Qualification";
         out.println("[INFO]Test niveau qualification");
         NiveauQualificationDAO niveauqualificationDAO = null;
         try {
@@ -187,7 +187,7 @@ public class ControlesDAOServlet extends HttpServlet {
             niveauqualification = niveauqualificationDAO.findById(3);
             out.println("ID : " + niveauqualification.getIdQualification());
             out.println("Intitulé : " + niveauqualification.getIntituleQualification());
-        }catch(Exception e){
+        } catch (Exception e) {
             out.println("[ERROR]Lors de la lecture de niveau de qualification");
         }
 
@@ -220,8 +220,9 @@ public class ControlesDAOServlet extends HttpServlet {
             methode = "suppression";
             testSupression(niveauqualificationDAO.findById(idTest), cl, methode, out);
             out.println();
-        }catch(Exception e){
+        } catch (Exception e) {
             out.println("[ERROR]lors de la création/ajout/suppression d'un niveau de qualification");
+            e.printStackTrace(out);
         }
 
         out.println("----------------------------------------------------------");
@@ -261,7 +262,7 @@ public class ControlesDAOServlet extends HttpServlet {
             out.println("id:" + sa.getIdSecteur());
             out.println("intitule:" + sa.getIntituleActivite());
             out.println();
-        }catch (Exception e){
+        } catch (Exception e) {
             out.println("[ERROR]Lors de la lecture des secteurs activite");
         }
 
@@ -306,10 +307,10 @@ public class ControlesDAOServlet extends HttpServlet {
             } catch (ServicesLocatorException ex) {
                 out.println("[ERROR] lors de l'ajout en cascade d'un secteur d'activité");
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             out.println("[ERROR]lors de la création/Ajout/Suppression d'un secteur activite");
         }
-/*
+
 
         //----------Test Candidat ---------
         out.println("Test du candidatDAO");
@@ -327,77 +328,52 @@ public class ControlesDAOServlet extends HttpServlet {
             out.println(candidat.toStringShort());
         }
         out.println();
+        Candidat c;
+        try {
+            out.println("Obtention de candidats n° 1 :");
+            c = candidatDAO.findById(1);
+            out.println("Id : " + c.getIdCandidat());
+            out.println("Cv : " + c.getCv());
+            out.println("Date de Depot : " + c.getDateDepot());
+            out.println("Nom : " + c.getNom());
+            out.println("Prenom : " + c.getPrenom());
+            out.println("Adresse Mail : " + c.getAdresseEmail());
+            out.println("Date de Naissance : " + c.getDateNaissance());
+            out.println("Adresse Postale : " + c.getAdressePostale());
+            out.println("Niveau Qualification : " + c.getNiveauQualification().getIntituleQualification());
+            out.println();
 
-        out.println("Obtention du candidat n°1 : ");
-        Candidat c = candidatDAO.findById(1);
-        out.println(c.getIdCandidat());
-        out.println(c.getNom());
-        out.println(c.getPrenom());
-        out.println(c.getAdresseEmail());
-        out.println(c.getCv());
-        out.println(c.getAdressePostale());
-        out.println(c.getDateNaissance());
-        out.println(c.getDateDepot());
+            out.println("Obtention decandidat n° 2 :");
+            c = candidatDAO.findById(2);
+            out.println("Id : " + c.getIdCandidat());
+            out.println("Cv : " + c.getCv());
+            out.println("Date de Depot : " + c.getDateDepot());
+            out.println("Nom : " + c.getNom());
+            out.println("Prenom : " + c.getPrenom());
+            out.println("Adresse Mail : " + c.getAdresseEmail());
+            out.println("Date de Naissance : " + c.getDateNaissance());
+            out.println("Adresse Postale : " + c.getAdressePostale());
+            out.println("Niveau Qualification : " + c.getNiveauQualification().getIntituleQualification());
+            out.println();
 
-        out.println("Obtention du candidat n°2 : ");
-        c = candidatDAO.findById(1);
-        out.println(c.getIdCandidat());
-        out.println(c.getNom());
-        out.println(c.getPrenom());
-        out.println(c.getAdresseEmail());
-        out.println(c.getCv());
-        out.println(c.getAdressePostale());
-        out.println(c.getDateNaissance());
-        out.println(c.getDateDepot());
-
-
-        // Contrôle(s) de fonctionnalités.
-        out.println("Liste des candidats :");
-        List<Candidat> candidats1 = candidatDAO.findAll();
-
-        for (Candidat candidature : candidats1) {
-            out.println(candidature.getNom() + " " + candidature.getPrenom());
+            out.println("Obtention de candidat n° 3 :");
+            c = candidatDAO.findById(3);
+            out.println("Id : " + c.getIdCandidat());
+            out.println("Cv : " + c.getCv());
+            out.println("Date de Depot : " + c.getDateDepot());
+            out.println("Nom : " + c.getNom());
+            out.println("Prenom : " + c.getPrenom());
+            out.println("Adresse Mail : " + c.getAdresseEmail());
+            out.println("Date de Naissance : " + c.getDateNaissance());
+            out.println("Adresse Postale : " + c.getAdressePostale());
+            out.println("Niveau Qualification : " + c.getNiveauQualification().getIntituleQualification());
+            out.println();
+        } catch (Exception e) {
+            out.println("[ERROR]lors de la lecture de candidats");
         }
+
         out.println();
 
-        out.println("Obtention de candidats n° 1 :");
-        c = candidatDAO.findById(1);
-        out.println("Id : " + c.getIdCandidat());
-        out.println("Cv : " + c.getCv());
-        out.println("Date de Depot : " + c.getDateDepot());
-        out.println("Nom : " + c.getNom());
-        out.println("Prenom : " + c.getPrenom());
-        out.println("Adresse Mail : " + c.getAdresseEmail());
-        out.println("Date de Naissance : " + c.getDateNaissance());
-        out.println("Adresse Postale : " + c.getAdressePostale());
-        out.println("Niveau Qualification : " + c.getNiveauQualification().getIntituleQualification());
-        out.println();
-
-        out.println("Obtention decandidat n° 2 :");
-        c = candidatDAO.findById(2);
-        out.println("Id : " + c.getIdCandidat());
-        out.println("Cv : " + c.getCv());
-        out.println("Date de Depot : " + c.getDateDepot());
-        out.println("Nom : " + c.getNom());
-        out.println("Prenom : " + c.getPrenom());
-        out.println("Adresse Mail : " + c.getAdresseEmail());
-        out.println("Date de Naissance : " + c.getDateNaissance());
-        out.println("Adresse Postale : " + c.getAdressePostale());
-        out.println("Niveau Qualification : " + c.getNiveauQualification().getIntituleQualification());
-        out.println();
-
-        out.println("Obtention de candidat n° 3 :");
-        c = candidatDAO.findById(3);
-        out.println("Id : " + c.getIdCandidat());
-        out.println("Cv : " + c.getCv());
-        out.println("Date de Depot : " + c.getDateDepot());
-        out.println("Nom : " + c.getNom());
-        out.println("Prenom : " + c.getPrenom());
-        out.println("Adresse Mail : " + c.getAdresseEmail());
-        out.println("Date de Naissance : " + c.getDateNaissance());
-        out.println("Adresse Postale : " + c.getAdressePostale());
-        out.println("Niveau Qualification : " + c.getNiveauQualification().getIntituleQualification());
-        out.println();
 
         try {
 
@@ -459,6 +435,7 @@ public class ControlesDAOServlet extends HttpServlet {
 
             //Utiliser l'outil de suppression
             out.println("Suppression du Candidat de test");
+            methode = "suppression";
             ifosuppr(cl, out);
             candidatDAO.remove(cand_recup);
             testSupression(candidatDAO.findById(idTest), cl, methode, out);
@@ -472,9 +449,9 @@ public class ControlesDAOServlet extends HttpServlet {
             out.println();
 
         } catch (Exception e_ajout_1) {
+            out.println("[ERROR]Lors de la création/ajout/suppression du candidat");
             e_ajout_1.printStackTrace();
         }
-
 
 
         //------------------------Offre Emploi-----------------------
@@ -485,58 +462,61 @@ public class ControlesDAOServlet extends HttpServlet {
 
         out.println("[INFO]Initialisation du DAO");
         try {
-            offreemploiDAO = (OffreEmploiDAO) ServicesLocator.getInstance().getRemoteInterface("OffreemploiDAO");
+            offreemploiDAO = (OffreEmploiDAO) ServicesLocator.getInstance().getRemoteInterface("OffreEmploiDAO");
         } catch (ServicesLocatorException ex) {
-            out.println("[ERROR]Echec de l'initialisation du DAO"+cl);
+            out.println("[ERROR]Echec de l'initialisation du DAO" + cl);
             throw new RuntimeException(ex);
         }
         out.println("[INFO]Liste des offre d'emplois : ");
         List<OffreEmploi> offreemplois = offreemploiDAO.findAll();
-        for (OffreEmploi offreemploi : offreemplois){
+        for (OffreEmploi offreemploi : offreemplois) {
             out.println(offreemploi.toStringShort());
 
         }
+        try {
+            out.println();
+            out.println("Obtention de l'offre n° 1 :");
+            OffreEmploi of = offreemploiDAO.findById(1);
+            out.println("Id : " + of.getIdOffre());
+            out.println("Entreprise : " + of.getNoEntreprise());
+            out.println("Descriptif Mission : " + of.getDescriptif());
+            out.println("Profil Recherche : " + of.getProfilRecherche());
+            out.println("Niveau Qualification : " + of.getNiveauQualification().getIntituleQualification());
+            out.println("Date de Depot : " + of.getDateDepot());
+            out.println();
 
-        out.println();
-        out.println("Obtention de l'offre n° 1 :");
-        OffreEmploi of = offreemploiDAO.findById(1);
-        out.println("Id : " + of.getIdOffre());
-        out.println("Entreprise : " + of.getNoEntreprise());
-        out.println("Descriptif Mission : " + of.getDescriptif());
-        out.println("Profil Recherche : " + of.getProfilRecherche());
-        out.println("Niveau Qualification : " + of.getNiveauQualification().getIntituleQualification());
-        out.println("Date de Depot : " + of.getDateDepot());
-        out.println();
+            out.println("Obtention de l'offre n° 2 :");
+            of = offreemploiDAO.findById(2);
+            out.println("Id : " + of.getIdOffre());
+            out.println("Entreprise : " + of.getNoEntreprise());
+            out.println("Descriptif Mission : " + of.getDescriptif());
+            out.println("Profil Recherche : " + of.getProfilRecherche());
+            out.println("Niveau Qualification : " + of.getNiveauQualification().getIntituleQualification());
+            out.println("Date de Depot : " + of.getDateDepot());
+            out.println();
 
-        out.println("Obtention de l'offre n° 2 :");
-        of = offreemploiDAO.findById(2);
-        out.println("Id : " + of.getIdOffre());
-        out.println("Entreprise : " + of.getNoEntreprise());
-        out.println("Descriptif Mission : " + of.getDescriptif());
-        out.println("Profil Recherche : " + of.getProfilRecherche());
-        out.println("Niveau Qualification : " + of.getNiveauQualification().getIntituleQualification());
-        out.println("Date de Depot : " + of.getDateDepot());
-        out.println();
-
-        out.println("Obtention de l'offre n° 3 :");
-        of = offreemploiDAO.findById(3);
-        out.println("Id : " + of.getIdOffre());
-        out.println("Entreprise : " + of.getNoEntreprise());
-        out.println("Descriptif Mission : " + of.getDescriptif());
-        out.println("Profil Recherche : " + of.getProfilRecherche());
-        out.println("Niveau Qualification : " + of.getNiveauQualification().getIntituleQualification());
-        out.println("Date de Depot : " + of.getDateDepot());
-        out.println();
-
+            out.println("Obtention de l'offre n° 3 :");
+            of = offreemploiDAO.findById(3);
+            out.println("Id : " + of.getIdOffre());
+            out.println("Entreprise : " + of.getNoEntreprise());
+            out.println("Descriptif Mission : " + of.getDescriptif());
+            out.println("Profil Recherche : " + of.getProfilRecherche());
+            out.println("Niveau Qualification : " + of.getNiveauQualification().getIntituleQualification());
+            out.println("Date de Depot : " + of.getDateDepot());
+            out.println();
+        } catch (Exception e) {
+            out.println("[ERROR]Lors de la lecture d'offre emplois");
+        }
 
 
         try {
+            cl = "offre Emploi";
             Date datedepot = new SimpleDateFormat("dd/MM/yyyy").parse("12/12/12");
             Set<SecteurActivite> liste_secteurs = new HashSet<SecteurActivite>();
             liste_secteurs.add(secteuractiviteDAO.findById(19));
             liste_secteurs.add(secteuractiviteDAO.findById(25));
             //OffreEmploi offre_test = new OffreEmploi(datedepot, "OFFRE DE FOUMALADE", "INGENIEUR TROP FORT",
-              //      "HACKER LA NASA", entrepriseDAO.findById(2), niveauqualificationDAO.findById(4), liste_secteurs);
+            //      "HACKER LA NASA", entrepriseDAO.findById(2), niveauqualificationDAO.findById(4), liste_secteurs);
             OffreEmploi offre_test = new OffreEmploi("Ingénieur trop fort", "Hacker la NASA", "Bac+1000", niveauqualificationDAO.findById(1), datedepot, entrepriseDAO.findById(1),
                     liste_secteurs);
             OffreEmploi offre_recup = null;
@@ -551,77 +531,67 @@ public class ControlesDAOServlet extends HttpServlet {
                     && (offre_test.getTitre().equals(offre_recup.getTitre()))
                     && (offre_test.getProfilRecherche().equals(offre_recup.getProfilRecherche()))
                     && (offre_test.getDateDepot().equals(offre_recup.getDateDepot()))
-                    //&& (offre_test.getNoEntreprise().getID() == offre_recup.getNoEntreprise().getId())
+                    && (offre_test.getNoEntreprise().getId() == offre_recup.getNoEntreprise().getId())
                     && (offre_test.getNiveauQualification().getIdQualification() == offre_recup.getNiveauQualification().getIdQualification())) {
-                out.println("Ajout et Recup OK");
+                out.println("[OK]Ajout et Recup");
             } else {
-                out.println("Ajout et Recup KO");
+                out.println("[ERROR]Ajout et Recup");
             }
             out.println();
 
-            out.println("Liste des Secteurs Activites de l'offreemploi de test : ");
+            out.println("[INFO]Liste des Secteurs Activites de l'offreemploi de test : ");
             Set<SecteurActivite> listes_activite_recup = offre_recup.getSecteurActivites();
             for (SecteurActivite secteurs_recup : listes_activite_recup) {
                 out.println(secteurs_recup.getIntituleActivite());
             }
             out.println();
 
-            out.println("Liste des OffreEmplois : ");
+            out.println("[INFO]Liste des OffreEmplois : ");
             List<OffreEmploi> offresemplois = offreemploiDAO.findAll();
             for (OffreEmploi offreemploi : offresemplois) {
                 out.println(offreemploi.getTitre());
             }
             out.println();
 
-            out.println("Modification de l'offreemploi de test");
+            out.println("[INFO]Modification de l'offreemploi de test");
             offre_recup.setTitre("HACKER LA DGSE");
             offreemploiDAO.update(offre_recup);
-
+            methode = "changement Titre";
             offre_recup = offreemploiDAO.findById(id_oe);
-            if (offre_test.getTitre() != offre_recup.getTitre()) {
-                out.println("Modif OK");
-                out.println("Ancien Titre : " + offre_test.getTitre());
-                out.println("Nouveau Titre : " + offre_recup.getTitre());
-            } else {
-                out.println("Modif KO");
-                out.println("Ancien Titre : " + offre_test.getTitre());
-                out.println("Nouveau Titre : " + offre_recup.getTitre());
-            }
+            compare(offre_test.getTitre(), offre_recup.getTitre(), cl, methode, out);
             out.println();
 
-            out.println("Affichage par Secteur Activité et Niveau Qualif (Informatique et Bac+4) ");
-            List<OffreEmploi> list_test = offreemploiDAO.findBySecteurActiviteAndNiveauQualification(1, 4);
+            out.println("[INFO]Affichage par Secteur Activité et Niveau Qualif (Informatique et Bac+4) ");
+            List<OffreEmploi> list_test = offreemploiDAO.findBySecteurActiviteAndNiveauQualification(1, 1);
             for (OffreEmploi offreemploi : list_test) {
                 out.println(offreemploi.getTitre());
             }
             out.println();
 
-            out.println("Suppression de l'offreemploi de test");
+            out.println("[INFO]Suppression de l'offreemploi de test");
             offreemploiDAO.remove(offre_recup);
-
-            if (offreemploiDAO.findById(id_oe) == null) {
-                out.println("Suppression OK");
-            } else {
-                out.println("Suppression KO");
-            }
+            ifosuppr(cl, out);
+            testSupression(offreemploiDAO.findById(id_oe), cl, "suppression offre emploi", out);
             out.println();
 
-            out.println("Liste des OffreEmplois : ");
+            out.println("[INFO]Liste des OffreEmplois : ");
             offresemplois = offreemploiDAO.findAll();
             for (OffreEmploi offreemploi : offresemplois) {
                 out.println(offreemploi.getTitre());
             }
             out.println();
-        }catch(Exception e3){
+        } catch (Exception e3) {
+            out.println("[ERROR]Lors de la création/modification/suppresion de l'offre emploi de test");
             e3.printStackTrace();
         }
         out.println();
+
         out.println("------------------Message Candidature------------------");
 
         //Message candidature
         MessageCandidatDAO messagecandidatDAO = null;
         try {
-            messagecandidatDAO = (MessageCandidatDAO) ServicesLocator.getInstance().getRemoteInterface("MessagecandidatDAO");
+            messagecandidatDAO = (MessageCandidatDAO) ServicesLocator.getInstance().getRemoteInterface("MessageCandidatDAO");
         } catch (ServicesLocatorException e5) {
             e5.printStackTrace();
         }
@@ -630,7 +600,7 @@ public class ControlesDAOServlet extends HttpServlet {
 
         try {
             // Contrôle(s) de fonctionnalités.
-            out.println("Liste des messagescandidatures :");
+            out.println("[INFO]Liste des messagescandidatures :");
             List<MessageCandidat> messagescandidatures = messagecandidatDAO.findAll();
 
             for (MessageCandidat messagecandidature : messagescandidatures) {
@@ -638,7 +608,7 @@ public class ControlesDAOServlet extends HttpServlet {
             }
             out.println();
 
-            out.println("Obtention du messagecandidature n° 1 :");
+            out.println("[INFO]Obtention du messagecandidature n° 1 :");
             MessageCandidat mc = messagecandidatDAO.findById(1);
             out.println("Id : " + mc.getIdMessageCandidat());
             out.println("Corps Message : " + mc.getCorpsMessage());
@@ -647,7 +617,7 @@ public class ControlesDAOServlet extends HttpServlet {
             out.println("Offre Emploi : " + mc.getOffreEmploi().getTitre());
             out.println();
 
-            out.println("Obtention du messagecandidature n° 2 :");
+            out.println("[INFO]Obtention du messagecandidature n° 2 :");
             mc = messagecandidatDAO.findById(2);
             out.println("Id : " + mc.getIdMessageCandidat());
             out.println("Corps Message : " + mc.getCorpsMessage());
@@ -656,7 +626,7 @@ public class ControlesDAOServlet extends HttpServlet {
             out.println("Offre Emploi : " + mc.getOffreEmploi().getTitre());
             out.println();
 
-            out.println("Obtention du messagecandidature n° 3 :");
+            out.println("[INFO]Obtention du messagecandidature n° 3 :");
             mc = messagecandidatDAO.findById(3);
             out.println("Id : " + mc.getIdMessageCandidat());
             out.println("Corps Message : " + mc.getCorpsMessage());
@@ -664,95 +634,86 @@ public class ControlesDAOServlet extends HttpServlet {
             out.println("Cv : " + mc.getCandidat().getCv());
             out.println("Offre Emploi : " + mc.getOffreEmploi().getTitre());
             out.println();
-
-            try {
-                String s_envoi = "12/02/2021";
-                Date dateenvoi = new SimpleDateFormat("dd/MM/yyyy").parse(s_envoi);
-                //Messagecandidat mc_test = new Messagecandidat("Bonjour j'aime l'argent, embauchez moi.",dateenvoi, candidatDAO.findById(5), offreemploiDAO.findById(1));
-                MessageCandidat mc_test = new MessageCandidat(candidatDAO.findById(1), offreemploiDAO.findById(1), "je vous aime putain", dateenvoi);
-                MessageCandidat mc_recup = null;
-                int id_mc = 0;
-                out.println("Ajout du messagecandidature de test");
-                mc_test = messagecandidatDAO.persist(mc_test);
-
-                id_mc = mc_test.getIdMessageCandidat();
-                mc_recup = messagecandidatDAO.findById(id_mc);
-                if ((mc_test.getIdMessageCandidat() == mc_recup.getIdMessageCandidat())
-                        && (mc_test.getCorpsMessage().equals(mc_recup.getCorpsMessage()))
-                        && (mc_test.getDateEnvoi().equals(mc_recup.getDateEnvoi()))
-                        && (mc_test.getCandidat().getIdCandidat() == mc_recup.getCandidat().getIdCandidat()
-                        && (mc_test.getOffreEmploi().getIdOffre() == mc_recup.getOffreEmploi().getIdOffre()))) {
-                    out.println("[OK]Ajout et Recup");
-                } else {
-                    out.println("[ERROR]Ajout et Recup");
-                }
-                out.println();
-
-                out.println("Liste des MessageCandidatures : ");
-                messagescandidatures = messagecandidatDAO.findAll();
-                for (MessageCandidat messagecandidat : messagescandidatures) {
-                    out.println(messagecandidat.getCorpsMessage());
-                }
-                out.println();
-
-                out.println("Modification du messagecandidature de test");
-                mc_recup.setCorpsMessage("Prenez-moi je dois rembourser mon crédit");
-                messagecandidatDAO.update(mc_recup);
-
-                mc_recup = messagecandidatDAO.findById(id_mc);
-
-                //CHANGER ici pour recup les trucs qui vont vien avec la fonction compare
-
-                if (mc_test.getCorpsMessage() != mc_recup.getCorpsMessage()) {
-                    out.println("Modif OK");
-                    out.println("Ancien Corps Message : " + mc_test.getCorpsMessage());
-                    out.println("Nouveau Corps Message : " + mc_recup.getCorpsMessage());
-                } else {
-                    out.println("Modif KO");
-                    out.println("Ancien Corps Message : " + mc_test.getCorpsMessage());
-                    out.println("Nouveau Corps Message : " + mc_recup.getCorpsMessage());
-                }
-                out.println();
-
-                out.println("Suppression du messagecandidature de test");
-                messagecandidatDAO.remove(mc_recup);
-                //TEST du remove
-
-                if (messagecandidatDAO.findById(id_mc) == null) {
-                    out.println("Suppression OK");
-                } else {
-                    out.println("Suppression KO");
-                }
-                out.println();
-
-                out.println();
-
-            } catch (Exception e_ajout_5) {
-                // TODO Auto-generated catch block
-                e_ajout_5.printStackTrace();
-            }
-
-
-        } catch (Exception e_tests_5) {
-            // TODO Auto-generated catch block
-            e_tests_5.printStackTrace();
+        } catch (Exception e) {
+            out.println("[ERROR]Lors de la lecture des messages candidature");
         }
 
+        try {
+            String s_envoi = "12/02/2021";
+            Date dateenvoi = new SimpleDateFormat("dd/MM/yyyy").parse(s_envoi);
+            //Messagecandidat mc_test = new Messagecandidat("Bonjour j'aime l'argent, embauchez moi.",dateenvoi, candidatDAO.findById(5), offreemploiDAO.findById(1));
+            MessageCandidat mc_test = new MessageCandidat(candidatDAO.findById(1), offreemploiDAO.findById(1), "je vous aime putain", dateenvoi);
+            MessageCandidat mc_recup = null;
+            int id_mc = 0;
+            out.println("Ajout du messagecandidature de test");
+            mc_test = messagecandidatDAO.persist(mc_test);
+
+            id_mc = mc_test.getIdMessageCandidat();
+            mc_recup = messagecandidatDAO.findById(id_mc);
+            if ((mc_test.getIdMessageCandidat() == mc_recup.getIdMessageCandidat())
+                    && (mc_test.getCorpsMessage().equals(mc_recup.getCorpsMessage()))
+                    && (mc_test.getDateEnvoi().equals(mc_recup.getDateEnvoi()))
+                    && (mc_test.getCandidat().getIdCandidat() == mc_recup.getCandidat().getIdCandidat()
+                    && (mc_test.getOffreEmploi().getIdOffre() == mc_recup.getOffreEmploi().getIdOffre()))) {
+                out.println("[OK]Ajout et Recup");
+            } else {
+                out.println("[ERROR]Ajout et Recup");
+            }
+
+            out.println();
+
+            out.println("Modification du messagecandidature de test");
+            mc_recup.setCorpsMessage("Prenez-moi je dois rembourser mon crédit");
+            messagecandidatDAO.update(mc_recup);
+
+            mc_recup = messagecandidatDAO.findById(id_mc);
+
+            //CHANGER ici pour recup les trucs qui vont vien avec la fonction compare
+
+            if (mc_test.getCorpsMessage() != mc_recup.getCorpsMessage()) {
+                out.println("Modif OK");
+                out.println("Ancien Corps Message : " + mc_test.getCorpsMessage());
+                out.println("Nouveau Corps Message : " + mc_recup.getCorpsMessage());
+            } else {
+                out.println("Modif KO");
+                out.println("Ancien Corps Message : " + mc_test.getCorpsMessage());
+                out.println("Nouveau Corps Message : " + mc_recup.getCorpsMessage());
+            }
+            out.println();
+
+            out.println("Suppression du messagecandidature de test");
+            messagecandidatDAO.remove(mc_recup);
+            //TEST du remove
+
+            if (messagecandidatDAO.findById(id_mc) == null) {
+                out.println("Suppression OK");
+            } else {
+                out.println("Suppression KO");
+            }
+            out.println();
+
+
+        } catch (Exception e_ajout_5) {
+            // TODO Auto-generated catch block
+            out.println("[ERROR]Lors de la création/ajout/mofif/suppression d'un message candidature");
+            e_ajout_5.printStackTrace();
+        }
+
+
         out.println("--------------------------------------------------------------");
-        out.println("[INFO]Messahe Offre emploi");
+        out.println("[INFO]Message Offre emploi");
+        cl = "offre Emploi";
 
         MessageOffreemploiDAO messageoffreemploiDAO = null;
         try {
-            messageoffreemploiDAO = (MessageOffreemploiDAO) ServicesLocator.getInstance().getRemoteInterface("MessageoffreemploiDAO");
+            messageoffreemploiDAO = (MessageOffreemploiDAO) ServicesLocator.getInstance().getRemoteInterface("MessageOffreemploiDAO");
         } catch (ServicesLocatorException ex) {
             throw new RuntimeException(ex);
         }
         List<MessageOffreemploi> messageoffreemplois = messageoffreemploiDAO.findAll();
-        for (MessageOffreemploi messageoffreemploi : messageoffreemplois){
+        for (MessageOffreemploi messageoffreemploi : messageoffreemplois) {
             out.println(messageoffreemploi.getCorpsMessage());
         }
-
-
 
 
         try {
@@ -786,70 +747,69 @@ public class ControlesDAOServlet extends HttpServlet {
             out.println("Cv : " + mod.getCandidat().getCv());
             out.println("Offre Emploi : " + mod.getOffreEmploi().getTitre());
             out.println();
-
-            try {
-                String s_envoi = "06/02/2021";
-                Date dateenvoi = new SimpleDateFormat("dd/MM/yyyy").parse(s_envoi);
-                //Messageoffreemploi moe_test = new Messageoffreemploi("Bonjour voici une offre sympa pour vous",dateenvoi, candidatureDAO.findById(5), offreemploiDAO.findById(1));
-                MessageOffreemploi moe_test = new MessageOffreemploi(candidatDAO.findById(1), offreemploiDAO.findById(1), "Bonjour, je suis juste la meilleur personnes", dateenvoi);
-                MessageOffreemploi moe_recup = null;
-                int id_moe = 0;
-                out.println("Ajout du messageoffredemploi de test");
-                moe_test = messageoffreemploiDAO.persist(moe_test);
-
-                id_moe = moe_test.getIdMessageOffre();
-                moe_recup = messageoffreemploiDAO.findById(id_moe);
-                if ((moe_test.getIdMessageOffre() == moe_recup.getIdMessageOffre())
-                        && (moe_test.getCorpsMessage().equals(moe_recup.getCorpsMessage()))
-                        && (moe_test.getDateEnvoi().equals(moe_recup.getDateEnvoi()))
-                        && (moe_test.getCandidat().getIdCandidat() == moe_recup.getCandidat().getIdCandidat()
-                        && (moe_test.getOffreEmploi().getIdOffre() == moe_recup.getOffreEmploi().getIdOffre()))) {
-                    out.println("[OK]Ajout et Recup");
-                } else {
-                    out.println("ERROR]Ajout et Recup");
-                }
-                out.println();
-
-                out.println();
-
-                out.println("Modification du messageoffredemploi de test");
-                moe_recup.setCorpsMessage("REPONDEZ VITE A L'OFFRE !!!");
-                messageoffreemploiDAO.update(moe_recup);
-
-                moe_recup = messageoffreemploiDAO.findById(id_moe);
-                if (moe_test.getCorpsMessage() != moe_recup.getCorpsMessage()) {
-                    out.println("Modif OK");
-                    out.println("Ancien Corps Message : " + moe_test.getCorpsMessage());
-                    out.println("Nouveau Corps Message : " + moe_recup.getCorpsMessage());
-                } else {
-                    out.println("Modif KO");
-                    out.println("Ancien Corps Message : " + moe_test.getCorpsMessage());
-                    out.println("Nouveau Corps Message : " + moe_recup.getCorpsMessage());
-                }
-                out.println();
-
-                out.println("Suppression du messageoffredemploi de test");
-                messageoffreemploiDAO.remove(moe_recup);
-
-                if (messageoffreemploiDAO.findById(id_moe) == null) {
-                    out.println("Suppression OK");
-                } else {
-                    out.println("Suppression KO");
-                }
-                out.println();
-
-            } catch (Exception e_ajout_6) {
-                // TODO Auto-generated catch block
-                e_ajout_6.printStackTrace();
-            }
-
-            out.println("-----------------------------------------------------------------------------");
-
-        } catch (Exception e_tests_6) {
-            // TODO Auto-generated catch block
-            e_tests_6.printStackTrace();
+        } catch (Exception e) {
+            out.println("[ERROR]Lors de la lecture des message Offre emploi");
         }
-*/
+
+        try {
+            String s_envoi = "06/02/2021";
+            Date dateenvoi = new SimpleDateFormat("dd/MM/yyyy").parse(s_envoi);
+            //Messageoffreemploi moe_test = new Messageoffreemploi("Bonjour voici une offre sympa pour vous",dateenvoi, candidatureDAO.findById(5), offreemploiDAO.findById(1));
+            MessageOffreemploi moe_test = new MessageOffreemploi(candidatDAO.findById(1), offreemploiDAO.findById(1), "Bonjour, je suis juste la meilleur personnes", dateenvoi);
+            MessageOffreemploi moe_recup = null;
+            int id_moe = 0;
+            out.println("[INFO]Ajout du messageoffredemploi de test");
+            moe_test = messageoffreemploiDAO.persist(moe_test);
+
+            id_moe = moe_test.getIdMessageOffre();
+            moe_recup = messageoffreemploiDAO.findById(id_moe);
+            if ((moe_test.getIdMessageOffre() == moe_recup.getIdMessageOffre())
+                    && (moe_test.getCorpsMessage().equals(moe_recup.getCorpsMessage()))
+                    && (moe_test.getDateEnvoi().equals(moe_recup.getDateEnvoi()))
+                    && (moe_test.getCandidat().getIdCandidat() == moe_recup.getCandidat().getIdCandidat()
+                    && (moe_test.getOffreEmploi().getIdOffre() == moe_recup.getOffreEmploi().getIdOffre()))) {
+                out.println("[OK]Ajout et Recup");
+            } else {
+                out.println("ERROR]Ajout et Recup");
+            }
+            out.println();
+
+            out.println();
+
+            out.println("Modification du messageoffredemploi de test");
+            moe_recup.setCorpsMessage("REPONDEZ VITE A L'OFFRE !!!");
+            messageoffreemploiDAO.update(moe_recup);
+
+            moe_recup = messageoffreemploiDAO.findById(id_moe);
+            if (moe_test.getCorpsMessage() != moe_recup.getCorpsMessage()) {
+                out.println("Modif OK");
+                out.println("Ancien Corps Message : " + moe_test.getCorpsMessage());
+                out.println("Nouveau Corps Message : " + moe_recup.getCorpsMessage());
+            } else {
+                out.println("Modif KO");
+                out.println("Ancien Corps Message : " + moe_test.getCorpsMessage());
+                out.println("Nouveau Corps Message : " + moe_recup.getCorpsMessage());
+            }
+            out.println();
+
+            out.println("Suppression du messageoffredemploi de test");
+            messageoffreemploiDAO.remove(moe_recup);
+
+            if (messageoffreemploiDAO.findById(id_moe) == null) {
+                out.println("Suppression OK");
+            } else {
+                out.println("Suppression KO");
+            }
+            out.println();
+
+        } catch (Exception e_ajout_6) {
+            // TODO Auto-generated catch block
+            out.println("[ERROR]Lors de l'ajout/modif/suppression d'un message offre emploi");
+            e_ajout_6.printStackTrace();
+        }
+
+        out.println("-----------------------------------------------------------------------------");
+
 
         //Fin du void service
     }
@@ -874,7 +834,7 @@ public class ControlesDAOServlet extends HttpServlet {
         }
     }
 
-    private void generateurEntreprise(EntrepriseDAO entrepriseDAO, PrintWriter out){
+    private void generateurEntreprise(EntrepriseDAO entrepriseDAO, PrintWriter out) {
         out.println();
         out.println("[INFO]Création entreprise de références");
         Entreprise entreprise;
@@ -883,7 +843,7 @@ public class ControlesDAOServlet extends HttpServlet {
                 entreprise = new Entreprise("Adresse" + i, "Descriptif" + i, "Nom" + i);
                 entrepriseDAO.persist(entreprise);
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             out.println("[ERROR]Problème lors de la création des entreprises de référence");
         }
     }
