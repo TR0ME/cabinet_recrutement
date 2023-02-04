@@ -150,7 +150,7 @@ public class ControlesDAOServlet extends HttpServlet {
             e.printStackTrace();
         }
         out.println("----------------------------------------------------------------");
-/*
+
 
         //----------------Test du niveau de qualification ----------------
        cl = "niveau Qualification";
@@ -171,51 +171,58 @@ public class ControlesDAOServlet extends HttpServlet {
             out.println(niveau.toStringShort());
         }
         out.println();
+        try {
+            //Test de recup des info à la mano pour le niveau de qualification
+            out.println("Niveau de qualilification n°1");
+            NiveauQualification niveauqualification = niveauqualificationDAO.findById(1);
+            out.println("ID : " + niveauqualification.getIdQualification());
+            out.println("Intitulé : " + niveauqualification.getIntituleQualification());
 
-        //Test de recup des info à la mano pour le niveau de qualification
-        out.println("Niveau de qualilification n°1");
-        NiveauQualification niveauqualification = niveauqualificationDAO.findById(1);
-        out.println("ID : " + niveauqualification.getIdQualification());
-        out.println("Intitulé : " + niveauqualification.getIntituleQualification());
+            out.println("Niveau de qualilification n°2");
+            niveauqualification = niveauqualificationDAO.findById(2);
+            out.println("ID : " + niveauqualification.getIdQualification());
+            out.println("Intitulé : " + niveauqualification.getIntituleQualification());
 
-        out.println("Niveau de qualilification n°2");
-        niveauqualification = niveauqualificationDAO.findById(2);
-        out.println("ID : " + niveauqualification.getIdQualification());
-        out.println("Intitulé : " + niveauqualification.getIntituleQualification());
-
-        out.println("Niveau de qualilification n°3");
-        niveauqualification = niveauqualificationDAO.findById(3);
-        out.println("ID : " + niveauqualification.getIdQualification());
-        out.println("Intitulé : " + niveauqualification.getIntituleQualification());
+            out.println("Niveau de qualilification n°3");
+            niveauqualification = niveauqualificationDAO.findById(3);
+            out.println("ID : " + niveauqualification.getIdQualification());
+            out.println("Intitulé : " + niveauqualification.getIntituleQualification());
+        }catch(Exception e){
+            out.println("[ERROR]Lors de la lecture de niveau de qualification");
+        }
 
         //Test ajout niveau qualification
         NiveauQualification niv_test = new NiveauQualification("Astronaute");
         NiveauQualification niv_recup = null;
         idTest = -1;
         out.println("[INFO]Ajout Niveau de qualification");
-        niv_test = niveauqualificationDAO.persist(niv_test);
-        idTest = niv_test.getIdQualification();
+        try {
+            niv_test = niveauqualificationDAO.persist(niv_test);
+            idTest = niv_test.getIdQualification();
 
-        niv_recup = niveauqualificationDAO.findById(idTest);
-        if (niv_test.getIdQualification() == niv_recup.getIdQualification() && niv_test.getIntituleQualification() == niv_recup.getIntituleQualification()) {
-            out.println("[OK]Ajout et récup");
-        } else {
-            out.println("[ERROR]Ajout et recup");
+            niv_recup = niveauqualificationDAO.findById(idTest);
+            if (niv_test.getIdQualification() == niv_recup.getIdQualification() && niv_test.getIntituleQualification() == niv_recup.getIntituleQualification()) {
+                out.println("[OK]Ajout et récup");
+            } else {
+                out.println("[ERROR]Ajout et recup");
+            }
+
+            out.println("[INFO]Test de la modification du niveau de qualification");
+            methode = "Intitule Qualification";
+            niv_recup.setIntituleQualification("Maitre de l'univers");
+            niveauqualificationDAO.update(niv_recup);
+            compare(niv_test.getIntituleQualification(), niv_recup.getIntituleQualification(), cl, methode, out);
+            out.println();
+
+            //Suppression du niveau de qualification
+            ifosuppr(cl, out);
+            niveauqualificationDAO.remove(niv_recup);
+            methode = "suppression";
+            testSupression(niveauqualificationDAO.findById(idTest), cl, methode, out);
+            out.println();
+        }catch(Exception e){
+            out.println("[ERROR]lors de la création/ajout/suppression d'un niveau de qualification");
         }
-
-        out.println("[INFO]Test de la modification du niveau de qualification");
-        methode = "Intitule Qualification";
-        niv_recup.setIntituleQualification("Maitre de l'univers");
-        niveauqualificationDAO.update(niv_recup);
-        compare(niv_test.getIntituleQualification(), niv_recup.getIntituleQualification(), cl, methode, out);
-        out.println();
-
-        //Suppression du niveau de qualification
-        ifosuppr(cl, out);
-        niveauqualificationDAO.remove(niv_recup);
-        methode = "suppression";
-        testSupression(niveauqualificationDAO.findById(idTest), cl, methode, out);
-        out.println();
 
         out.println("----------------------------------------------------------");
         out.println("[INFO]Test de la class SecteurActivite");
@@ -223,10 +230,12 @@ public class ControlesDAOServlet extends HttpServlet {
         SecteurActiviteDAO secteuractiviteDAO = null;
         try {
             secteuractiviteDAO = (SecteurActiviteDAO) ServicesLocator.getInstance().getRemoteInterface("SecteurActiviteDAO");
+            out.println("[INFO]" + cl + "DAO créer avec succes");
         } catch (ServicesLocatorException ex) {
+            out.println("[ERROR]lors de la cration du DAO secteur activite");
             throw new RuntimeException(ex);
         }
-        out.println("[INFO]" + cl + "DAO créer avec succes");
+
 
         out.println("[INFO]Liste des secteurs d'activité");
         List<SecteurActivite> secteuractivites = secteuractiviteDAO.findAll();
@@ -234,65 +243,73 @@ public class ControlesDAOServlet extends HttpServlet {
             secteuractivite.toStringShort();
         }
         out.println();
+        try {
+            out.println("[INFO]Secteur Activité n°1 : ");
+            SecteurActivite sa = secteuractiviteDAO.findById(1);
+            out.println("id:" + sa.getIdSecteur());
+            out.println("intitule:" + sa.getIntituleActivite());
+            out.println();
 
-        out.println("[INFO]Secteur Activité n°1 : ");
-        SecteurActivite sa = secteuractiviteDAO.findById(1);
-        out.println("id:" + sa.getIdSecteur());
-        out.println("intitule:" + sa.getIntituleActivite());
-        out.println();
+            out.println("[INFO]Secteur Activité n°2 : ");
+            sa = secteuractiviteDAO.findById(2);
+            out.println("id:" + sa.getIdSecteur());
+            out.println("intitule:" + sa.getIntituleActivite());
+            out.println();
 
-        out.println("[INFO]Secteur Activité n°2 : ");
-        sa = secteuractiviteDAO.findById(2);
-        out.println("id:" + sa.getIdSecteur());
-        out.println("intitule:" + sa.getIntituleActivite());
-        out.println();
+            out.println("[INFO]Secteur Activité n°3 : ");
+            sa = secteuractiviteDAO.findById(3);
+            out.println("id:" + sa.getIdSecteur());
+            out.println("intitule:" + sa.getIntituleActivite());
+            out.println();
+        }catch (Exception e){
+            out.println("[ERROR]Lors de la lecture des secteurs activite");
+        }
 
-        out.println("[INFO]Secteur Activité n°3 : ");
-        sa = secteuractiviteDAO.findById(3);
-        out.println("id:" + sa.getIdSecteur());
-        out.println("intitule:" + sa.getIntituleActivite());
-        out.println();
 
         //Test de la création d'un secteur d'activité
         SecteurActivite sa_test = new SecteurActivite("joueur de flute, retrouvez nos meilleurs joueurs de pipo");
         SecteurActivite sa_recup = null;
         idTest = -1;
-        sa_test = secteuractiviteDAO.persist(sa_test);
-        idTest = sa_test.getIdSecteur();
-        sa_recup = secteuractiviteDAO.findById(idTest);
-        if (sa_test.getIdSecteur() == sa_recup.getIdSecteur() && sa_test.getIntituleActivite() == sa_recup.getIntituleActivite()) {
-            out.println("[OK]Ajout et recup " + cl);
-        } else {
-            out.println("[ERROR]Ajout et recup " + cl);
-        }
-
-        out.println("[INFO] test de la modification de " + cl);
-        sa_recup.setIntituleActivite("pipoteur pro");
-        secteuractiviteDAO.update(sa_recup);
-        sa_recup = secteuractiviteDAO.update(sa_recup);
-        methode = "Intitulé Activité";
-        compare(sa_test.getIntituleActivite(), sa_recup.getIntituleActivite(), cl, methode, out);
-
-        out.println();
-        ifosuppr(cl, out);
-        secteuractiviteDAO.remove(sa_recup);
-        testSupression(secteuractiviteDAO.findById(idTest), cl, "supprimer", out);
         try {
-            out.println("----------------->test ajout en cascade");
-            SecteurActivite s = secteuractiviteDAO.findById(Integer.parseInt("21"));
-            CandidatDAO candidatDAO2 = (CandidatDAO) ServicesLocator.getInstance().getRemoteInterface("CandidatDAO");
-            Candidat c = candidatDAO2.findById(5);
-            s.getCandidats().add(c);
-            secteuractiviteDAO.update(s);
-            out.println("[OK]update du secteur");
-            c.getSecteurActivites().add(s);
-            candidatDAO2.update(c);
-            out.println("[OK]update du cand");
-            out.println("[OK]secteur cascade");
-        } catch (ServicesLocatorException ex) {
-            out.println("[ERROR] lors de l'ajout en cascade d'un secteur d'activité");
-        }
+            sa_test = secteuractiviteDAO.persist(sa_test);
+            idTest = sa_test.getIdSecteur();
+            sa_recup = secteuractiviteDAO.findById(idTest);
+            if (sa_test.getIdSecteur() == sa_recup.getIdSecteur() && sa_test.getIntituleActivite() == sa_recup.getIntituleActivite()) {
+                out.println("[OK]Ajout et recup " + cl);
+            } else {
+                out.println("[ERROR]Ajout et recup " + cl);
+            }
 
+            out.println("[INFO] test de la modification de " + cl);
+            sa_recup.setIntituleActivite("pipoteur pro");
+            secteuractiviteDAO.update(sa_recup);
+            sa_recup = secteuractiviteDAO.update(sa_recup);
+            methode = "Intitulé Activité";
+            compare(sa_test.getIntituleActivite(), sa_recup.getIntituleActivite(), cl, methode, out);
+
+            out.println();
+            ifosuppr(cl, out);
+            secteuractiviteDAO.remove(sa_recup);
+            testSupression(secteuractiviteDAO.findById(idTest), cl, "supprimer", out);
+            try {
+                out.println("----------------->test ajout en cascade");
+                SecteurActivite s = secteuractiviteDAO.findById(Integer.parseInt("21"));
+                CandidatDAO candidatDAO2 = (CandidatDAO) ServicesLocator.getInstance().getRemoteInterface("CandidatDAO");
+                Candidat c = candidatDAO2.findById(5);
+                s.getCandidats().add(c);
+                secteuractiviteDAO.update(s);
+                out.println("[OK]update du secteur");
+                c.getSecteurActivites().add(s);
+                candidatDAO2.update(c);
+                out.println("[OK]update du cand");
+                out.println("[OK]secteur cascade");
+            } catch (ServicesLocatorException ex) {
+                out.println("[ERROR] lors de l'ajout en cascade d'un secteur d'activité");
+            }
+        }catch (Exception e){
+            out.println("[ERROR]lors de la création/Ajout/Suppression d'un secteur activite");
+        }
+/*
 
         //----------Test Candidat ---------
         out.println("Test du candidatDAO");
