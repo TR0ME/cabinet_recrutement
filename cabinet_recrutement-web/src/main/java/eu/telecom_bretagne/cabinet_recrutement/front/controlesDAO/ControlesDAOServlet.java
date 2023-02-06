@@ -3,19 +3,10 @@ package eu.telecom_bretagne.cabinet_recrutement.front.controlesDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import eu.telecom_bretagne.cabinet_recrutement.data.dao.*;
 import eu.telecom_bretagne.cabinet_recrutement.data.model.*;
-import eu.telecom_bretagne.cabinet_recrutement.data.model.CandidatDAO;
-import eu.telecom_bretagne.cabinet_recrutement.data.model.MessageCandidatDAO;
-import eu.telecom_bretagne.cabinet_recrutement.data.model.MessageOffreemploiDAO;
-import eu.telecom_bretagne.cabinet_recrutement.data.model.NiveauQualificationDAO;
-import eu.telecom_bretagne.cabinet_recrutement.data.model.OffreEmploiDAO;
-import eu.telecom_bretagne.cabinet_recrutement.data.model.SecteurActiviteDAO;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -189,6 +180,7 @@ public class ControlesDAOServlet extends HttpServlet {
             out.println("Intitulé : " + niveauqualification.getIntituleQualification());
         } catch (Exception e) {
             out.println("[ERROR]Lors de la lecture de niveau de qualification");
+            //e.printStackTrace(out);
         }
 
         //Test ajout niveau qualification
@@ -201,7 +193,12 @@ public class ControlesDAOServlet extends HttpServlet {
             idTest = niv_test.getIdQualification();
 
             niv_recup = niveauqualificationDAO.findById(idTest);
-            if (niv_test.getIdQualification() == niv_recup.getIdQualification() && niv_test.getIntituleQualification() == niv_recup.getIntituleQualification()) {
+            /*out.println("--------------------------");
+            out.println("ID recu qualif : "+idTest);
+            out.println(niv_test.toStringShort());
+            out.println(niv_recup.toStringShort());
+            out.println("--------------------------");*/
+            if (niv_test.getIdQualification() == niv_recup.getIdQualification() && niv_test.getIntituleQualification().equals(niv_recup.getIntituleQualification())) {
                 out.println("[OK]Ajout et récup");
             } else {
                 out.println("[ERROR]Ajout et recup");
@@ -275,7 +272,7 @@ public class ControlesDAOServlet extends HttpServlet {
             sa_test = secteuractiviteDAO.persist(sa_test);
             idTest = sa_test.getIdSecteur();
             sa_recup = secteuractiviteDAO.findById(idTest);
-            if (sa_test.getIdSecteur() == sa_recup.getIdSecteur() && sa_test.getIntituleActivite() == sa_recup.getIntituleActivite()) {
+            if (sa_test.getIdSecteur() == sa_recup.getIdSecteur() && sa_test.getIntituleActivite().equals(sa_recup.getIntituleActivite())) {
                 out.println("[OK]Ajout et recup " + cl);
             } else {
                 out.println("[ERROR]Ajout et recup " + cl);
@@ -392,6 +389,11 @@ public class ControlesDAOServlet extends HttpServlet {
 
             idTest = cand_test.getIdCandidat();
             cand_recup = candidatDAO.findById(idTest);
+            /*out.println("--------------------------");
+            out.println("Id candidat :"+idTest);
+            out.println(cand_test.toStringShort());
+            out.println(cand_recup.toStringShort());
+            out.println("--------------------------");*/
             if ((cand_test.getIdCandidat() == cand_recup.getIdCandidat())
                     && (cand_test.getNom().equals(cand_recup.getNom()))
                     && (cand_test.getPrenom().equals(cand_recup.getPrenom()))
@@ -400,8 +402,7 @@ public class ControlesDAOServlet extends HttpServlet {
                     && (cand_test.getAdressePostale().equals(cand_recup.getAdressePostale()))
                     && (cand_test.getDateNaissance().equals(cand_recup.getDateNaissance()))
                     && (cand_test.getDateDepot().equals(cand_recup.getDateDepot()))
-                    && (cand_test.getNiveauQualification().getIdQualification() == cand_recup.getNiveauQualification()
-                    .getIdQualification())) {
+                    && (cand_test.getNiveauQualification().getIdQualification() == cand_recup.getNiveauQualification().getIdQualification())) {
                 out.println("[OKAjout et Recup");
             } else {
                 out.println("[ERROR]Ajout et Recup");
@@ -526,6 +527,13 @@ public class ControlesDAOServlet extends HttpServlet {
 
             id_oe = offre_test.getIdOffre();
             offre_recup = offreemploiDAO.findById(id_oe);
+            /*out.println("------------------------------");
+            out.println("offre de test : ");
+            out.println("ID:"+offre_test.getIdOffre());
+            out.println("descriptif"+offre_test.getDescriptif());
+            out.println("titre"+offre_test.getTitre());
+            out.println("profile recherché"+offre_test.getProfilRecherche());
+            */
             if ((offre_test.getIdOffre() == offre_recup.getIdOffre())
                     && (offre_test.getDescriptif().equals(offre_recup.getDescriptif()))
                     && (offre_test.getTitre().equals(offre_recup.getTitre()))
@@ -586,7 +594,7 @@ public class ControlesDAOServlet extends HttpServlet {
         }
         out.println();
 
-        out.println("------------------Message Candidature------------------");
+        out.println("------------------Message Candidat------------------");
 
         //Message candidature
         MessageCandidatDAO messagecandidatDAO = null;
@@ -595,12 +603,12 @@ public class ControlesDAOServlet extends HttpServlet {
         } catch (ServicesLocatorException e5) {
             e5.printStackTrace();
         }
-        out.println("Contrôles de fonctionnement du DAO MessagecandidatureDAO");
+        out.println("Contrôles de fonctionnement du DAO MessagecandidatDAO");
         out.println();
 
         try {
             // Contrôle(s) de fonctionnalités.
-            out.println("[INFO]Liste des messagescandidatures :");
+            out.println("[INFO]Liste des messagescandidat :");
             List<MessageCandidat> messagescandidatures = messagecandidatDAO.findAll();
 
             for (MessageCandidat messagecandidature : messagescandidatures) {
@@ -608,7 +616,7 @@ public class ControlesDAOServlet extends HttpServlet {
             }
             out.println();
 
-            out.println("[INFO]Obtention du messagecandidature n° 1 :");
+            out.println("[INFO]Obtention du messagecandidat n° 1 :");
             MessageCandidat mc = messagecandidatDAO.findById(1);
             out.println("Id : " + mc.getIdMessageCandidat());
             out.println("Corps Message : " + mc.getCorpsMessage());
@@ -617,7 +625,7 @@ public class ControlesDAOServlet extends HttpServlet {
             out.println("Offre Emploi : " + mc.getOffreEmploi().getTitre());
             out.println();
 
-            out.println("[INFO]Obtention du messagecandidature n° 2 :");
+            out.println("[INFO]Obtention du messagecandidat n° 2 :");
             mc = messagecandidatDAO.findById(2);
             out.println("Id : " + mc.getIdMessageCandidat());
             out.println("Corps Message : " + mc.getCorpsMessage());
@@ -626,7 +634,7 @@ public class ControlesDAOServlet extends HttpServlet {
             out.println("Offre Emploi : " + mc.getOffreEmploi().getTitre());
             out.println();
 
-            out.println("[INFO]Obtention du messagecandidature n° 3 :");
+            out.println("[INFO]Obtention du messagecandidat n° 3 :");
             mc = messagecandidatDAO.findById(3);
             out.println("Id : " + mc.getIdMessageCandidat());
             out.println("Corps Message : " + mc.getCorpsMessage());
@@ -662,8 +670,8 @@ public class ControlesDAOServlet extends HttpServlet {
 
             out.println();
 
-            out.println("Modification du messagecandidature de test");
-            mc_recup.setCorpsMessage("Prenez-moi je dois rembourser mon crédit");
+            out.println("Modification du messagecandidat de test");
+            mc_recup.setCorpsMessage("Je suis jutste un FIP complètement bourré");
             messagecandidatDAO.update(mc_recup);
 
             mc_recup = messagecandidatDAO.findById(id_mc);
@@ -671,25 +679,17 @@ public class ControlesDAOServlet extends HttpServlet {
             //CHANGER ici pour recup les trucs qui vont vien avec la fonction compare
 
             if (mc_test.getCorpsMessage() != mc_recup.getCorpsMessage()) {
-                out.println("Modif OK");
-                out.println("Ancien Corps Message : " + mc_test.getCorpsMessage());
-                out.println("Nouveau Corps Message : " + mc_recup.getCorpsMessage());
+                out.println("[OK]Modif");
             } else {
-                out.println("Modif KO");
-                out.println("Ancien Corps Message : " + mc_test.getCorpsMessage());
-                out.println("Nouveau Corps Message : " + mc_recup.getCorpsMessage());
+                out.println("[ERROR]Modif");
             }
             out.println();
 
-            out.println("Suppression du messagecandidature de test");
+            out.println("[INFO]Suppression du messagecandidature de test");
             messagecandidatDAO.remove(mc_recup);
             //TEST du remove
-
-            if (messagecandidatDAO.findById(id_mc) == null) {
-                out.println("Suppression OK");
-            } else {
-                out.println("Suppression KO");
-            }
+            ifosuppr(cl, out);
+            testSupression(messagecandidatDAO.findById(id_mc),cl, "suppression", out);
             out.println();
 
 
@@ -834,19 +834,35 @@ public class ControlesDAOServlet extends HttpServlet {
         }
     }
 
-    private void generateurEntreprise(EntrepriseDAO entrepriseDAO, PrintWriter out) {
+    private List<Entreprise> generateurEntreprise(EntrepriseDAO entrepriseDAO, PrintWriter out) {
         out.println();
         out.println("[INFO]Création entreprise de références");
+        LinkedList<Entreprise> entrepriseList = new LinkedList<Entreprise>();
         Entreprise entreprise;
         try {
             for (int i = 1; i <= 10; i++) {
                 entreprise = new Entreprise("Adresse" + i, "Descriptif" + i, "Nom" + i);
                 entrepriseDAO.persist(entreprise);
+                entrepriseList.add(entreprise);
             }
         } catch (Exception e) {
             out.println("[ERROR]Problème lors de la création des entreprises de référence");
         }
+        return entrepriseList;
     }
+
+    private void cleanEntreprise(LinkedList<Entreprise> entrepriseList, PrintWriter out, EntrepriseDAO entrepriseDAO){
+        out.println("[INFO]Clean entreprise :");
+        for (Entreprise entreprise : entrepriseList){
+            try{
+                entrepriseDAO.remove(entreprise);
+            }catch (Exception e){
+                out.println("[ERROR]Lors de la suppression des entreprises : "+entreprise.toString());
+            }
+        }
+        out.println("[OK]Entrepise supprimées");
+    }
+
 
 
 }

@@ -1,4 +1,4 @@
-package eu.telecom_bretagne.cabinet_recrutement.data.model;
+package eu.telecom_bretagne.cabinet_recrutement.data.dao;
 // Generated Feb 2, 2023, 3:05:57 PM by Hibernate Tools 5.4.20.Final
 
 
@@ -7,6 +7,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import jakarta.ejb.Stateless;
 import jakarta.persistence.*;
+import eu.telecom_bretagne.cabinet_recrutement.data.model.*;
 
 /**
  * Home object for domain model class MessageOffreemploi.
@@ -36,6 +37,9 @@ public class MessageOffreemploiDAO {
     public void remove(MessageOffreemploi persistentInstance) {
         logger.log(Level.INFO, "removing MessageOffreemploi instance");
         try {
+            if(!entityManager.contains(persistentInstance)){
+                persistentInstance = entityManager.merge(persistentInstance);
+            }
             entityManager.remove(persistentInstance);
             logger.log(Level.INFO, "remove successful");
         }

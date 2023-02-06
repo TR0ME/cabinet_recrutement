@@ -1,4 +1,4 @@
-package eu.telecom_bretagne.cabinet_recrutement.data.model;
+package eu.telecom_bretagne.cabinet_recrutement.data.dao;
 // Generated Feb 2, 2023, 3:05:57 PM by Hibernate Tools 5.4.20.Final
 
 
@@ -9,6 +9,7 @@ import jakarta.ejb.Stateless;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.Query;
+import eu.telecom_bretagne.cabinet_recrutement.data.model.*;
 
 /**
  * Home object for domain model class NiveauQualification.
@@ -38,6 +39,9 @@ public class NiveauQualificationDAO {
     public void remove(NiveauQualification persistentInstance) {
         logger.log(Level.INFO, "removing NiveauQualification instance");
         try {
+            if(!entityManager.contains(persistentInstance)){
+                persistentInstance = entityManager.merge(persistentInstance);
+            }
             entityManager.remove(persistentInstance);
             logger.log(Level.INFO, "remove successful");
         }
@@ -46,6 +50,8 @@ public class NiveauQualificationDAO {
             throw re;
         }
     }
+
+
 
     public NiveauQualification update(NiveauQualification niveauQualification) {
         if (niveauQualification != null) {
@@ -90,10 +96,5 @@ public class NiveauQualificationDAO {
         return (List<NiveauQualification>)l;
     }
 
-    /*public List<NiveauQualification> findAll(){
-        logger.log(Level.INFO, "getting all NiveauQualification");
-        //List<NiveauQualification> instance = entityManager.find(NiveauQualification.class,1);
-        return null;
-    }*/
 }
 
