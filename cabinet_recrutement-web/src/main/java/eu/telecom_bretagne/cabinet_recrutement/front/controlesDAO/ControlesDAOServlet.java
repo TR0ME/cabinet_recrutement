@@ -50,14 +50,45 @@ public class ControlesDAOServlet extends HttpServlet {
 
         // Récupération de la réféence vers le(s) DAO(s)
         EntrepriseDAO entrepriseDAO = null;
+        NiveauQualificationDAO niveauqualificationDAO = null;
+        SecteurActiviteDAO secteuractiviteDAO = null;
+        CandidatDAO candidatDAO = null;
+        OffreEmploiDAO offreemploiDAO = null;
+        MessageCandidatDAO messagecandidatDAO = null;
+        MessageOffreemploiDAO messageoffreemploiDAO = null;
+
         try {
             entrepriseDAO = (EntrepriseDAO) ServicesLocator.getInstance().getRemoteInterface("EntrepriseDAO");
+            niveauqualificationDAO = (NiveauQualificationDAO) ServicesLocator.getInstance().getRemoteInterface("NiveauQualificationDAO");
+            secteuractiviteDAO = (SecteurActiviteDAO) ServicesLocator.getInstance().getRemoteInterface("SecteurActiviteDAO");
+            candidatDAO = (CandidatDAO) ServicesLocator.getInstance().getRemoteInterface("CandidatDAO");
+            offreemploiDAO = (OffreEmploiDAO) ServicesLocator.getInstance().getRemoteInterface("OffreEmploiDAO");
+            messagecandidatDAO = (MessageCandidatDAO) ServicesLocator.getInstance().getRemoteInterface("MessageCandidatDAO");
+            messageoffreemploiDAO = (MessageOffreemploiDAO) ServicesLocator.getInstance().getRemoteInterface("MessageOffreemploiDAO");
         } catch (ServicesLocatorException e) {
-            e.printStackTrace();
+            out.println("[ERROR]Lors de l'initialisation des DAO");
+            e.printStackTrace(out);
         }
-        generateurEntreprise(entrepriseDAO, out);
-        out.println("[INFO]Contrôles de fonctionnement du DAO EntrepriseDAO");
-        out.println();
+
+        try{
+            LinkedList<Entreprise> entrepriseLinkedList =  generateurEntreprise(entrepriseDAO, out);
+            LinkedList<NiveauQualification> niveauQualificationLinkedList = generateurNiveauQualification(niveauqualificationDAO, out);
+            LinkedList<SecteurActivite> secteurActiviteLinkedList = generateurSecteurActivite(secteuractiviteDAO, out);
+            Set<SecteurActivite> secteurActiviteSet = new HashSet<SecteurActivite>();
+            secteurActiviteSet.add(secteurActiviteLinkedList.get(1));
+            secteurActiviteSet.add(secteurActiviteLinkedList.get(2));
+            LinkedList<Candidat> candidatLinkedList = generateurCandidat(candidatDAO, niveauQualificationLinkedList.get(1), secteurActiviteSet,out);
+            LinkedList<OffreEmploi> offreEmploiLinkedList = generateurOffre(offreemploiDAO, entrepriseLinkedList.get(1), candidatLinkedList.get(1),
+                    niveauQualificationLinkedList.get(1), secteurActiviteSet, out);
+            LinkedList<MessageCandidat> messageCandidatLinkedList = generateurMessageCandidat(messagecandidatDAO, candidatLinkedList.get(1),offreEmploiLinkedList.get(1),out);
+            LinkedList<MessageOffreemploi> messageOffreemploiLinkedList = generateurMessageOffreemploi(messageoffreemploiDAO, candidatLinkedList.get(1), offreEmploiLinkedList.get(1), out);
+            out.println("[INFO]Contrôles de fonctionnement du DAO EntrepriseDAO");
+            out.println();
+        }catch (Exception e){
+            out.println("[ERROR]Lors du replissage de la bdd");
+            e.printStackTrace(out);
+        }
+
 
         // Contrôle(s) de fonctionnalités.
         //Affichage des entreprises
@@ -139,7 +170,7 @@ public class ControlesDAOServlet extends HttpServlet {
             out.println();
         } catch (Exception e) {
             out.println("[ERROR]Création/Insertion/Suppression entreprise");
-            e.printStackTrace();
+            e.printStackTrace(out);
         }
         out.println("----------------------------------------------------------------");
 
@@ -147,13 +178,7 @@ public class ControlesDAOServlet extends HttpServlet {
         //----------------Test du niveau de qualification ----------------
         cl = "niveau Qualification";
         out.println("[INFO]Test niveau qualification");
-        NiveauQualificationDAO niveauqualificationDAO = null;
-        try {
-            niveauqualificationDAO = (NiveauQualificationDAO) ServicesLocator.getInstance().getRemoteInterface("NiveauQualificationDAO");
-        } catch (ServicesLocatorException ex) {
-            throw new RuntimeException(ex);
-        }
-        out.println("[OK]Niveau qualification DAO crée");
+
         out.println();
 
         //Liste niv qualification
@@ -226,14 +251,7 @@ public class ControlesDAOServlet extends HttpServlet {
         out.println("----------------------------------------------------------");
         out.println("[INFO]Test de la class SecteurActivite");
         cl = "Secteur Activite";
-        SecteurActiviteDAO secteuractiviteDAO = null;
-        try {
-            secteuractiviteDAO = (SecteurActiviteDAO) ServicesLocator.getInstance().getRemoteInterface("SecteurActiviteDAO");
-            out.println("[INFO]" + cl + "DAO créer avec succes");
-        } catch (ServicesLocatorException ex) {
-            out.println("[ERROR]lors de la cration du DAO secteur activite");
-            throw new RuntimeException(ex);
-        }
+
 
 
         out.println("[INFO]Liste des secteurs d'activité");
@@ -292,10 +310,20 @@ public class ControlesDAOServlet extends HttpServlet {
             testSupression(secteuractiviteDAO.findById(idTest), cl, "supprimer", out);
             try {
                 out.println("----------------->test ajout en cascade");
-                SecteurActivite s = secteuractiviteDAO.findById(Integer.parseInt("21"));
+                SecteurActivite s = secteuractiviteDAO.findById(1);
                 CandidatDAO candidatDAO2 = (CandidatDAO) ServicesLocator.getInstance().getRemoteInterface("CandidatDAO");
                 Candidat c = candidatDAO2.findById(5);
-                s.getCandidats().add(c);
+
+                out.println();
+                out.println(s.toStringShort());
+                out.println(c.toStringShort());
+                out.println();
+
+                s.addCandidat(c);
+                /*Set<Candidat> setCand = s.getCandidats();
+                setCand.add(c);
+                s.setCandidats(setCand);*/
+
                 secteuractiviteDAO.update(s);
                 out.println("[OK]update du secteur");
                 c.getSecteurActivites().add(s);
@@ -311,13 +339,7 @@ public class ControlesDAOServlet extends HttpServlet {
 
 
         //----------Test Candidat ---------
-        out.println("Test du candidatDAO");
-        CandidatDAO candidatDAO = null;
-        try {
-            candidatDAO = (CandidatDAO) ServicesLocator.getInstance().getRemoteInterface("CandidatDAO");
-        } catch (ServicesLocatorException ex) {
-            ex.printStackTrace();
-        }
+
         out.println();
 
         out.println("Liste des candidats : ");
@@ -378,8 +400,8 @@ public class ControlesDAOServlet extends HttpServlet {
             Date datenaissance = new SimpleDateFormat("dd/MM/yyyy").parse("12/12/1212");
             Set<SecteurActivite> liste_secteurs = new HashSet<SecteurActivite>();
             //changer les Id
-            liste_secteurs.add(secteuractiviteDAO.findById(19));
-            liste_secteurs.add(secteuractiviteDAO.findById(25));
+            liste_secteurs.add(secteuractiviteDAO.findById(1));
+            liste_secteurs.add(secteuractiviteDAO.findById(2));
             Date datedepot = new SimpleDateFormat("dd/MM/yyyy").parse("11/11/1111");
             Candidat cand_test = new Candidat("Guyader", "Fabienne", "fabienne.guyader@imt-atlantique.fr", "PSF", "Incapable de diriger le pole stage et formation",
                     datedepot, datenaissance, niveauqualificationDAO.findById(1), liste_secteurs);
@@ -452,7 +474,7 @@ public class ControlesDAOServlet extends HttpServlet {
 
         } catch (Exception e_ajout_1) {
             out.println("[ERROR]Lors de la création/ajout/suppression du candidat");
-            e_ajout_1.printStackTrace();
+            e_ajout_1.printStackTrace(out);
         }
 
 
@@ -460,20 +482,19 @@ public class ControlesDAOServlet extends HttpServlet {
         out.println("-----------------------------------------------------");
         out.println("--Offre emploi--");
         cl = "Offre emploi";
-        OffreEmploiDAO offreemploiDAO = null;
+
 
         out.println("[INFO]Initialisation du DAO");
-        try {
-            offreemploiDAO = (OffreEmploiDAO) ServicesLocator.getInstance().getRemoteInterface("OffreEmploiDAO");
-        } catch (ServicesLocatorException ex) {
-            out.println("[ERROR]Echec de l'initialisation du DAO" + cl);
-            throw new RuntimeException(ex);
-        }
-        out.println("[INFO]Liste des offre d'emplois : ");
-        List<OffreEmploi> offreemplois = offreemploiDAO.findAll();
-        for (OffreEmploi offreemploi : offreemplois) {
-            out.println(offreemploi.toStringShort());
 
+        out.println("[INFO]Liste des offre d'emplois : ");
+        try {
+            List<OffreEmploi> offreemplois = offreemploiDAO.findAll();
+            for (OffreEmploi offreemploi : offreemplois) {
+                out.println(offreemploi.toStringShort());
+
+            }
+        }catch (Exception e){
+            e.printStackTrace(out);
         }
         try {
             out.println();
@@ -598,12 +619,7 @@ public class ControlesDAOServlet extends HttpServlet {
         out.println("------------------Message Candidat------------------");
 
         //Message candidature
-        MessageCandidatDAO messagecandidatDAO = null;
-        try {
-            messagecandidatDAO = (MessageCandidatDAO) ServicesLocator.getInstance().getRemoteInterface("MessageCandidatDAO");
-        } catch (ServicesLocatorException e5) {
-            e5.printStackTrace();
-        }
+
         out.println("Contrôles de fonctionnement du DAO MessagecandidatDAO");
         out.println();
 
@@ -705,12 +721,7 @@ public class ControlesDAOServlet extends HttpServlet {
         out.println("[INFO]Message Offre emploi");
         cl = "offre Emploi";
 
-        MessageOffreemploiDAO messageoffreemploiDAO = null;
-        try {
-            messageoffreemploiDAO = (MessageOffreemploiDAO) ServicesLocator.getInstance().getRemoteInterface("MessageOffreemploiDAO");
-        } catch (ServicesLocatorException ex) {
-            throw new RuntimeException(ex);
-        }
+
         List<MessageOffreemploi> messageoffreemplois = messageoffreemploiDAO.findAll();
         for (MessageOffreemploi messageoffreemploi : messageoffreemplois) {
             out.println(messageoffreemploi.getCorpsMessage());
@@ -827,6 +838,9 @@ public class ControlesDAOServlet extends HttpServlet {
         }
     }
 
+
+    //----------------START GENERATION BDD INIT---------------------------------------------------------------------------------------
+
     private LinkedList<Entreprise> generateurEntreprise(EntrepriseDAO entrepriseDAO, PrintWriter out) {
         out.println();
         out.println("[INFO]Création entreprise de références");
@@ -843,7 +857,6 @@ public class ControlesDAOServlet extends HttpServlet {
         }
         return entrepriseList;
     }
-
     private void cleanEntreprise(LinkedList<Entreprise> entrepriseList, PrintWriter out, EntrepriseDAO entrepriseDAO){
         out.println("[INFO]Clean entreprise :");
         for (Entreprise entreprise : entrepriseList){
@@ -856,8 +869,7 @@ public class ControlesDAOServlet extends HttpServlet {
         out.println("[OK]Entrepise supprimées");
     }
 
-    //-------------PARTIE LAURE-----------------
-
+    //Partie Laure
     //---------start Offre Emploi------------------
     private LinkedList<OffreEmploi> generateurOffre(OffreEmploiDAO offreEmploiDAO, Entreprise entreprise, Candidat candidat, NiveauQualification niveauQualification, Set<SecteurActivite> secteurActivite, PrintWriter out){
         out.println();
@@ -868,7 +880,7 @@ public class ControlesDAOServlet extends HttpServlet {
 //      Rajout d'une initialisation et d'un try catch pour la variable dateDepot du constructeur d'OffreEmploi
         Date dateDepot = null;
         try {
-            dateDepot = new SimpleDateFormat("dd/MM/yyyy").parse("12/12/1212");
+            dateDepot = new SimpleDateFormat("dd/MM/yyyy").parse("12/12/2021");
         } catch (ParseException e) {
             throw new RuntimeException(e);
         }
@@ -937,7 +949,6 @@ public class ControlesDAOServlet extends HttpServlet {
 
 
 
-
     //---------start Niveau Qualification------------------
     private LinkedList<NiveauQualification> generateurNiveauQualification(NiveauQualificationDAO niveauQualificationDAO, PrintWriter out){
         out.println();
@@ -966,10 +977,141 @@ public class ControlesDAOServlet extends HttpServlet {
         }
         out.println("[OK]NiveauQualification supprimées");
     }
+
     //-------------------------------------
 
 
 
+    //---------start Candidat------------------
+    private LinkedList<Candidat> generateurCandidat(CandidatDAO candidatDAO, NiveauQualification niveauQualification, Set<SecteurActivite> liste_secteurs, PrintWriter out) {
+        out.println();
+        out.println("[INFO]Création candidat de références");
+        LinkedList<Candidat> candidatList = new LinkedList<Candidat>();
+        Candidat candidat;
 
-    //---------start xxxxxx------------------
+        //      Rajout d'une initialisation et d'un try catch pour la variable dateDepot du constructeur d'OffreEmploi
+        Date dateDepot = null;
+        Date dateNaissance = null;
+        try {
+            dateDepot = new SimpleDateFormat("dd/MM/yyyy").parse("12/12/1212");
+            dateNaissance = new SimpleDateFormat("dd/MM/yyyy").parse("11/11/1111");
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
+
+        try {
+            for (int i = 1; i <= 10; i++) {
+                //variables du constructeur :
+                //(String nom, String prenom, String mail, String adressePostale, String cv, Date datedepot,
+                // Date datenaissance, NiveauQualification byId, Set<SecteurActivite> liste_secteurs)
+                candidat = new Candidat("Nom" + i, "Prenom" + i, "Mail" + i, "Adresse Postale" + i, "CV" + i, dateDepot, dateNaissance, niveauQualification, liste_secteurs);
+                candidat = candidatDAO.persist(candidat);
+                candidatList.add(candidat);
+            }
+        } catch (Exception e) {
+            out.println("[ERROR]Problème lors de la création des candidats de référence");
+        }
+        return candidatList;
+    }
+    private void cleanCandidat(LinkedList<Candidat> candidatList, PrintWriter out, CandidatDAO candidatDAO){
+        out.println("[INFO]Clean candidat :");
+        for (Candidat candidat : candidatList){
+            try{
+                candidatDAO.remove(candidat);
+            }catch (Exception e){
+                out.println("[ERROR]Lors de la suppression des candidat : "+candidat.toString());
+            }
+        }
+        out.println("[OK]Candidat supprimées");
+    }
+
+    //------------------------------------------------------
+
+
+
+    //-------------------start Message candidat--------------------
+    private LinkedList<MessageCandidat> generateurMessageCandidat(MessageCandidatDAO messageCandidatDAO, Candidat candidat, OffreEmploi offreEmploi, PrintWriter out) {
+        out.println();
+        out.println("[INFO]Création message Candidat de références");
+        LinkedList<MessageCandidat> messageCandidatList = new LinkedList<MessageCandidat>();
+        MessageCandidat messageCandidat;
+
+        // Rajout d'une initialisation et d'un try catch pour la variable dateDepot du constructeur d'OffreEmploi
+        Date dateEnvoi = null;
+        try {
+            dateEnvoi = new SimpleDateFormat("dd/MM/yyyy").parse("10/10/1010");
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
+
+        try {
+            for (int i = 1; i <= 10; i++) {
+
+                //affichage constructeur :
+                //(int idMessageCandidat, Candidat candidat, OffreEmploi offreEmploi, Date dateEnvoi, String corpsMessage
+                messageCandidat = new MessageCandidat(candidat, offreEmploi,"Corps Message "+i, dateEnvoi);
+                messageCandidat = messageCandidatDAO.persist(messageCandidat);
+                messageCandidatList.add(messageCandidat);
+            }
+        } catch (Exception e) {
+            out.println("[ERROR]Problème lors de la création des message Candidat de référence");
+        }
+        return messageCandidatList;
+    }
+    private void cleanMessageCandidat(LinkedList<MessageCandidat> messageCandidatList, PrintWriter out, MessageCandidatDAO messageCandidatDAO){
+        out.println("[INFO]Clean messageCandidat :");
+        for (MessageCandidat messageCandidat : messageCandidatList){
+            try{
+                messageCandidatDAO.remove(messageCandidat);
+            }catch (Exception e){
+                out.println("[ERROR]Lors de la suppression des messageCandidat : "+messageCandidat.toString());
+            }
+        }
+        out.println("[OK]MessageCandidat supprimées");
+    }
+    //-------------------------------------------------------------
+
+    //-------------start Message Offre emploi--------------
+    private LinkedList<MessageOffreemploi> generateurMessageOffreemploi(MessageOffreemploiDAO messageOffreemploiDAO, Candidat candidat, OffreEmploi offreEmploi, PrintWriter out) {
+        out.println();
+        out.println("[INFO]Création messageOffreemploi de références");
+        LinkedList<MessageOffreemploi> messageOffreemploiList = new LinkedList<MessageOffreemploi>();
+        MessageOffreemploi messageOffreemploi;
+
+        // Rajout d'une initialisation et d'un try catch pour la variable dateDepot du constructeur d'OffreEmploi
+        Date dateEnvoi = null;
+        try {
+            dateEnvoi = new SimpleDateFormat("dd/MM/yyyy").parse("10/10/1010");
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
+
+        try {
+            for (int i = 1; i <= 10; i++) {
+
+                //affichage constructeur :
+                //(Candidat byId, OffreEmploi byId1, String corpsMessage, Date dateenvoi)
+                messageOffreemploi = new MessageOffreemploi(candidat, offreEmploi, "Corps Message "+i, dateEnvoi);
+                messageOffreemploi = messageOffreemploiDAO.persist(messageOffreemploi);
+                messageOffreemploiList.add(messageOffreemploi);
+            }
+        } catch (Exception e) {
+            out.println("[ERROR]Problème lors de la création des message Candidat de référence");
+        }
+        return messageOffreemploiList;
+    }
+    private void cleanMessageOffreemploi(LinkedList<MessageOffreemploi> messageOffreemploiList, MessageOffreemploiDAO messageOffreemploiDAO, PrintWriter out){
+        out.println("[INFO]Clean messageOffreemploi :");
+        for (MessageOffreemploi messageOffreemploi : messageOffreemploiList){
+            try{
+                messageOffreemploiDAO.remove(messageOffreemploi);
+            }catch (Exception e){
+                out.println("[ERROR]Lors de la suppression des messageOffreemploi : "+messageOffreemploi.toString());
+            }
+        }
+        out.println("[OK]MessageOffreemploi supprimées");
+    }
+
+
+    //-----------------END GENERATION BDD INIT---------------------------------------------------------------------------
 }

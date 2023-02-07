@@ -73,6 +73,10 @@ public class SecteurActivite  implements java.io.Serializable {
         this.candidats = candidats;
     }
 
+    public void addCandidat(Candidat candidat){
+        this.candidats.add(candidat);
+    }
+
 @ManyToMany(fetch=FetchType.LAZY)
     @JoinTable(name="secteur_offre", schema="public", joinColumns = { 
         @JoinColumn(name="no_secteur", nullable=false, updatable=false) }, inverseJoinColumns = { 
