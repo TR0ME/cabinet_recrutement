@@ -871,7 +871,7 @@ public class ControlesDAOServlet extends HttpServlet {
         OffreEmploi offreEmploi;
         try {
             for (int i = 1; i <= 10; i++) {
-                offreEmploi = new OffreEmploi("Adresse" + i, "Descriptif" + i, "Nom" + i);
+                offreEmploi = new OffreEmploi("Titre" + i, "Descriptif" + i, "Nom" + i, "profil_recherche" + i, "date_depot" + i, "no_entreprise" + i, "no_qualification" + i);
                 offreEmploi = offreEmploiDAO.persist(offreEmploi);
                 offreEmploiList.add(offreEmploi);
             }
