@@ -88,7 +88,7 @@ public class OffreEmploiDAO {
     {
         Query query = entityManager.createQuery("select offreEmploi from OffreEmploi offreEmploi " +
                 "where offreEmploi.entreprise.id = :idE " +
-                "order by offreEmploi.id desc");
+                "order by offreEmploi.idOffre desc");
         query.setParameter("idE", idEntreprise);
         List<OffreEmploi> l = query.getResultList();
         return l;
@@ -97,9 +97,9 @@ public class OffreEmploiDAO {
     public List<OffreEmploi> findBySecteurActiviteAndNiveauQualification(int idSecteurActivite,
                                                                          int idNiveauQualification)
     {
-        Query query = entityManager.createQuery("select oe from OffreEmploi oe join oe.secteursActivite sects " +
-                "where sects.id = :idSA and oe.niveauQualification.id = :idNQ " +
-                "order by oe.id desc");
+        Query query = entityManager.createQuery("select oe from OffreEmploi oe join oe.secteurActivites sects " +
+                "where sects.idSecteur = :idSA and oe.niveauQualification.idQualification = :idNQ " +
+                "order by oe.idOffre desc");
         query.setParameter("idSA", idSecteurActivite);
         query.setParameter("idNQ", idNiveauQualification);
         List<OffreEmploi> l = query.getResultList();
@@ -109,7 +109,7 @@ public class OffreEmploiDAO {
     public List<OffreEmploi> findAll()
     {
         Query query = entityManager.createQuery("select offreEmploi from OffreEmploi offreEmploi " +
-                "order by offreEmploi.id desc");
+                "order by offreEmploi.idOffre desc");
         List<OffreEmploi> l = query.getResultList();
         return l;
     }
