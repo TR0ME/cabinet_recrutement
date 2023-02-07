@@ -2,6 +2,7 @@ package eu.telecom_bretagne.cabinet_recrutement.front.controlesDAO;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -864,14 +865,27 @@ public class ControlesDAOServlet extends HttpServlet {
     }
 
     //-------------PARTIE LAURE-----------------
-    private LinkedList<OffreEmploi> generateurOffre(OffreEmploiDAO offreEmploiDAO, PrintWriter out){
+
+    //---------start Offre Emploi------------------
+    private LinkedList<OffreEmploi> generateurOffre(OffreEmploiDAO offreEmploiDAO, Entreprise entreprise, Candidat candidat, NiveauQualification niveauQualification, Set<SecteurActivite> secteurActivite, PrintWriter out){
         out.println();
         out.println("[INFO]Création d'offres emploi de références");
         LinkedList<OffreEmploi> offreEmploiList = new LinkedList<OffreEmploi>();
         OffreEmploi offreEmploi;
+
+//      Rajout d'une initialisation et d'un try catch pour la variable dateDepot du constructeur d'OffreEmploi
+        Date dateDepot = null;
+        try {
+            dateDepot = new SimpleDateFormat("dd/MM/yyyy").parse("12/12/1212");
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
+
+        //Début "vraie" méthode start OffreEmploi
         try {
             for (int i = 1; i <= 10; i++) {
-                offreEmploi = new OffreEmploi("Titre" + i, "Descriptif" + i, "Nom" + i, "profil_recherche" + i, "date_depot" + i, "no_entreprise" + i, "no_qualification" + i);
+                //(String titre, String descriptif, String profilRecherche, NiveauQualification niveauQualification, Date dateDepot, Entreprise entreprise, Set<SecteurActivite> secteurActivites)
+                offreEmploi = new OffreEmploi("Titre" + i, "Descriptif" + i, "profil_recherche" + i, niveauQualification, dateDepot, entreprise, secteurActivite);
                 offreEmploi = offreEmploiDAO.persist(offreEmploi);
                 offreEmploiList.add(offreEmploi);
             }
@@ -881,6 +895,89 @@ public class ControlesDAOServlet extends HttpServlet {
         return offreEmploiList;
     }
 
+    private void cleanOffreEmploi(LinkedList<OffreEmploi> offreEmploiList, PrintWriter out, OffreEmploiDAO offreEmploiDAO){
+        out.println("[INFO]Clean offreEmploi :");
+        for (OffreEmploi offreEmploi : offreEmploiList){
+            try{
+                offreEmploiDAO.remove(offreEmploi);
+            }catch (Exception e){
+                out.println("[ERROR]Lors de la suppression des entreprises : "+offreEmploi.toString());
+            }
+        }
+        out.println("[OK]OffreEmploi supprimées");
+    }
+    //-----------------------------------------------------
 
 
+
+
+
+    //---------start Secteur Activité------------------
+    private LinkedList<SecteurActivite> generateurSecteurActivite(SecteurActiviteDAO secteurActiviteDAO, PrintWriter out){
+        out.println();
+        out.println("[INFO]Création de secteurs d'activité de références");
+        LinkedList<SecteurActivite> secteurActiviteList = new LinkedList<SecteurActivite>();
+        SecteurActivite secteurActivite;
+        try {
+            for (int i = 1; i <= 10; i++) {
+                //(int idSecteur, String intituleActivite, Set<Candidat> candidats, Set<OffreEmploi> offreEmplois)
+                secteurActivite = new SecteurActivite("IntituleActivite" + i);
+                secteurActivite = secteurActiviteDAO.persist(secteurActivite);
+                secteurActiviteList.add(secteurActivite);
+            }
+        } catch (Exception e) {
+            out.println("[ERROR]Problème lors de la création de secteurs d'activité de référence");
+        }
+        return secteurActiviteList;
+    }
+    private void cleanSecteurActivite(LinkedList<SecteurActivite> secteurActiviteList, PrintWriter out, SecteurActiviteDAO secteurActiviteDAO){
+        out.println("[INFO]Clean secteurActivite :");
+        for (SecteurActivite secteurActivite : secteurActiviteList){
+            try{
+                secteurActiviteDAO.remove(secteurActivite);
+            }catch (Exception e){
+                out.println("[ERROR]Lors de la suppression des secteurs d'activité : "+secteurActivite.toString());
+            }
+        }
+        out.println("[OK]SecteurActivite supprimées");
+    }
+    //---------------------------
+
+
+
+
+    //---------start Niveau Qualification------------------
+    private LinkedList<NiveauQualification> generateurNiveauQualification(NiveauQualificationDAO niveauQualificationDAO, PrintWriter out){
+        out.println();
+        out.println("[INFO]Création de niveau de qualification de référence");
+        NiveauQualification niveauQualification;
+        LinkedList<NiveauQualification> niveauQualificationList=new LinkedList<NiveauQualification>();
+        try{
+            for (int i = 1; i < 5; i++) {
+                niveauQualification = new NiveauQualification("Intitule"+i);
+                niveauQualification=niveauQualificationDAO.persist(niveauQualification);
+                niveauQualificationList.add(niveauQualification);
+            }
+        }catch(Exception e){
+            out.println("[ERROR]Problème lors de la création des niveaux de qualifications");
+        }
+        return niveauQualificationList;
+    }
+    private void cleanNiveauQualification(LinkedList<NiveauQualification> niveauQualificationList, PrintWriter out, NiveauQualificationDAO niveauQualificationDAO){
+        out.println("[INFO]Clean niveauQualification :");
+        for (NiveauQualification niveauQualification : niveauQualificationList){
+            try{
+                niveauQualificationDAO.remove(niveauQualification);
+            }catch (Exception e){
+                out.println("[ERROR]Lors de la suppression des niveaux de qualification : "+niveauQualification.toString());
+            }
+        }
+        out.println("[OK]NiveauQualification supprimées");
+    }
+    //-------------------------------------
+
+
+
+
+    //---------start xxxxxx------------------
 }
