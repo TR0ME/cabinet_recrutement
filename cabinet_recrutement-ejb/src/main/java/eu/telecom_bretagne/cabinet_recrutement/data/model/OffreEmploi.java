@@ -48,16 +48,15 @@ public class OffreEmploi  implements java.io.Serializable {
        this.messageOffreemplois = messageOffreemplois;
        this.secteurActivites = secteurActivites;
     }
-    public OffreEmploi(String titre, String descriptif, String profilRecherche, NiveauQualification niveauQualification, Date dateDepot, Entreprise entreprise,
-                        Set<SecteurActivite> secteurActivites) {
+    public OffreEmploi(String titre, String descriptif, String profilRecherche, NiveauQualification niveauQualification, Date dateDepot, Entreprise entreprise) {
         this.niveauQualification = niveauQualification;
         this.titre = titre;
         this.descriptif = descriptif;
         this.profilRecherche = profilRecherche;
         this.dateDepot = dateDepot;
         this.entreprise = entreprise;
-        this.messageOffreemplois = messageOffreemplois;
-        this.secteurActivites = secteurActivites;
+        //this.messageOffreemplois = messageOffreemplois;
+        //this.secteurActivites = secteurActivites;
     }
    
      @Id
@@ -164,7 +163,7 @@ public class OffreEmploi  implements java.io.Serializable {
 
 
     public String toStringShort(){
-        return "OffreEmploi[Titre="+this.titre+", message="+this.messageOffreemplois+", descriptif"+this.descriptif+"]";
+        return "OffreEmploi[Titre="+this.titre+", descriptif="+this.descriptif+", descriptif="+this.descriptif+"]";
     }
 
 

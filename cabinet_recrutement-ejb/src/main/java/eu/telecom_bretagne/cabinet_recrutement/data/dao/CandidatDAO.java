@@ -84,8 +84,8 @@ public class CandidatDAO {
 
     public List<Candidat> findBySecteurActiviteAndNiveauQualification(int idSecteurActivite, int idNiveauQualification)
     {
-        Query query = entityManager.createQuery("select c from Candidature c join c.secteursActivite secteur " +
-                "where secteur.id = :idSA and c.niveauQualification.id = :idNQ " +
+        Query query = entityManager.createQuery("select c from Candidat c join c.secteurs_activite secteur " +
+                "where secteur.id_secteur = :idSA and c.niveau_qualification.id_qualification = :idNQ " +
                 "order by c.id desc");
         query.setParameter("idSA", idSecteurActivite);
         query.setParameter("idNQ", idNiveauQualification);

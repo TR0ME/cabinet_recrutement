@@ -56,6 +56,13 @@ public class ControlesDAOServlet extends HttpServlet {
         OffreEmploiDAO offreemploiDAO = null;
         MessageCandidatDAO messagecandidatDAO = null;
         MessageOffreemploiDAO messageoffreemploiDAO = null;
+        LinkedList<Entreprise> entrepriseLinkedList =  null;
+        LinkedList<NiveauQualification> niveauQualificationLinkedList = null;
+        LinkedList<SecteurActivite> secteurActiviteLinkedList = null;
+        LinkedList<Candidat> candidatLinkedList =null;
+        LinkedList<OffreEmploi> offreEmploiLinkedList =null;
+        LinkedList<MessageCandidat> messageCandidatLinkedList =null;
+        LinkedList<MessageOffreemploi> messageOffreemploiLinkedList = null;
 
         try {
             entrepriseDAO = (EntrepriseDAO) ServicesLocator.getInstance().getRemoteInterface("EntrepriseDAO");
@@ -71,18 +78,17 @@ public class ControlesDAOServlet extends HttpServlet {
         }
 
         try{
-            LinkedList<Entreprise> entrepriseLinkedList =  generateurEntreprise(entrepriseDAO, out);
-            LinkedList<NiveauQualification> niveauQualificationLinkedList = generateurNiveauQualification(niveauqualificationDAO, out);
-            LinkedList<SecteurActivite> secteurActiviteLinkedList = generateurSecteurActivite(secteuractiviteDAO, out);
+            entrepriseLinkedList =  generateurEntreprise(entrepriseDAO, out);
+            niveauQualificationLinkedList = generateurNiveauQualification(niveauqualificationDAO, out);
+            secteurActiviteLinkedList = generateurSecteurActivite(secteuractiviteDAO, out);
             Set<SecteurActivite> secteurActiviteSet = new HashSet<SecteurActivite>();
             secteurActiviteSet.add(secteurActiviteLinkedList.get(1));
             secteurActiviteSet.add(secteurActiviteLinkedList.get(2));
-            LinkedList<Candidat> candidatLinkedList = generateurCandidat(candidatDAO, niveauQualificationLinkedList.get(1), secteurActiviteSet,out);
-            LinkedList<OffreEmploi> offreEmploiLinkedList = generateurOffre(offreemploiDAO, entrepriseLinkedList.get(1), candidatLinkedList.get(1),
-                    niveauQualificationLinkedList.get(1), secteurActiviteSet, out);
-            LinkedList<MessageCandidat> messageCandidatLinkedList = generateurMessageCandidat(messagecandidatDAO, candidatLinkedList.get(1),offreEmploiLinkedList.get(1),out);
-            LinkedList<MessageOffreemploi> messageOffreemploiLinkedList = generateurMessageOffreemploi(messageoffreemploiDAO, candidatLinkedList.get(1), offreEmploiLinkedList.get(1), out);
-            out.println("[INFO]Contrôles de fonctionnement du DAO EntrepriseDAO");
+            candidatLinkedList = generateurCandidat(candidatDAO, niveauQualificationLinkedList.get(1), secteurActiviteSet,out);
+            offreEmploiLinkedList = generateurOffre(offreemploiDAO, entrepriseLinkedList.get(1), candidatLinkedList.get(1), niveauQualificationLinkedList.get(1), secteurActiviteSet, out);
+            messageCandidatLinkedList = generateurMessageCandidat(messagecandidatDAO, candidatLinkedList.get(1),offreEmploiLinkedList.get(1),out);
+            messageOffreemploiLinkedList = generateurMessageOffreemploi(messageoffreemploiDAO, candidatLinkedList.get(1), offreEmploiLinkedList.get(1), out);
+            out.println("[INFO]La BDD s'est remplie");
             out.println();
         }catch (Exception e){
             out.println("[ERROR]Lors du replissage de la bdd");
@@ -402,21 +408,34 @@ public class ControlesDAOServlet extends HttpServlet {
             //changer les Id
             liste_secteurs.add(secteuractiviteDAO.findById(1));
             liste_secteurs.add(secteuractiviteDAO.findById(2));
+            out.println("Sercteur activite utilise pour les candidatures");
+            for (SecteurActivite secteurActivite : liste_secteurs){
+                out.println(secteurActivite.toStringShort());
+            }
+            out.println("End");
             Date datedepot = new SimpleDateFormat("dd/MM/yyyy").parse("11/11/1111");
-            Candidat cand_test = new Candidat("Guyader", "Fabienne", "fabienne.guyader@imt-atlantique.fr", "PSF", "Incapable de diriger le pole stage et formation",
-                    datedepot, datenaissance, niveauqualificationDAO.findById(1), liste_secteurs);
+            //Candidat(String nom, String prenom, String mail, String adressePostale, String cv, Date datedepot, Date datenaissance,
+            //                    NiveauQualification byId, Set<SecteurActivite> liste_secteurs) {
+            Candidat cand_test = new Candidat("Guyader", "Fabienne", "fabienne.guyader@imt-atlantique.fr", "PSF",
+                    "Incapable de diriger le pole stage et formation", datedepot, datenaissance, niveauqualificationDAO.findById(1), liste_secteurs);
+
+
+
             Candidat cand_recup = null;
             idTest = -1;
-            out.println("Ajout de la candidature de test");
+            out.println("Ajout de la candidat de test");
             cand_test = candidatDAO.persist(cand_test);
+
+            //out.println(cand_test.toStringShort());
+
 
             idTest = cand_test.getIdCandidat();
             cand_recup = candidatDAO.findById(idTest);
-            /*out.println("--------------------------");
+            out.println("--------------------------");
             out.println("Id candidat :"+idTest);
-            out.println(cand_test.toStringShort());
-            out.println(cand_recup.toStringShort());
-            out.println("--------------------------");*/
+            out.println("Candidat de test : "+cand_test.toStringShort());
+            out.println("Candidat recup de la bdd : "+cand_recup.toStringShort());
+            out.println("--------------------------");
             if ((cand_test.getIdCandidat() == cand_recup.getIdCandidat())
                     && (cand_test.getNom().equals(cand_recup.getNom()))
                     && (cand_test.getPrenom().equals(cand_recup.getPrenom()))
@@ -426,18 +445,26 @@ public class ControlesDAOServlet extends HttpServlet {
                     && (cand_test.getDateNaissance().equals(cand_recup.getDateNaissance()))
                     && (cand_test.getDateDepot().equals(cand_recup.getDateDepot()))
                     && (cand_test.getNiveauQualification().getIdQualification() == cand_recup.getNiveauQualification().getIdQualification())) {
-                out.println("[OKAjout et Recup");
+                out.println("[OK]Ajout et Recup");
             } else {
                 out.println("[ERROR]Ajout et Recup");
             }
             out.println();
-
-            out.println("[INFO]Liste des Secteurs Activites de la candidature de test : ");
-            Set<SecteurActivite> listes_activite_recup = cand_recup.getSecteurActivites();
-            for (SecteurActivite secteurs_recup : listes_activite_recup) {
-                out.println(secteurs_recup.getIntituleActivite());
+            liste_secteurs = cand_test.getSecteurActivites();
+            out.println("Sercteur activite utilise pour les candidatures (apres ajout)");
+            for (SecteurActivite secteurActivite : liste_secteurs){
+                out.println(secteurActivite.toStringShort());
             }
-            out.println();
+            out.println("End");
+            out.println(cand_recup.toStringShort());
+
+            /*out.println("[INFO]Liste des Secteurs Activites du candidat de test : ");
+            liste_secteurs = cand_recup.getSecteurActivites();
+            for (SecteurActivite secteurs_recup : liste_secteurs) {
+                out.println(secteurs_recup.toStringShort());
+                //out.println(secteurs_recup.g);
+            }
+            out.println();*/
 
 
             out.println("[INFO]Modification de la candidature de test");
@@ -449,8 +476,8 @@ public class ControlesDAOServlet extends HttpServlet {
 
             //Faire pour l'ensemble d'un candidat
 
-            out.println("[INFO]Affichage par Secteur Activité et Niveau Qualif (Informatique et Bac+4) ");
-            List<Candidat> list_test = candidatDAO.findBySecteurActiviteAndNiveauQualification(19, 4);
+            out.println("[INFO]Affichage par Secteur Activité et Niveau Qualif");
+            List<Candidat> list_test = candidatDAO.findBySecteurActiviteAndNiveauQualification(1, 4);
             for (Candidat candidat : list_test) {
                 out.println(candidat.getNom() + " " + candidat.getPrenom());
             }
@@ -488,7 +515,11 @@ public class ControlesDAOServlet extends HttpServlet {
 
         out.println("[INFO]Liste des offre d'emplois : ");
         try {
+            for (OffreEmploi offre : offreEmploiLinkedList){
+                out.println(offre.toStringShort());
+            }
             List<OffreEmploi> offreemplois = offreemploiDAO.findAll();
+            out.println(offreemplois.toString());
             for (OffreEmploi offreemploi : offreemplois) {
                 out.println(offreemploi.toStringShort());
 
@@ -540,8 +571,9 @@ public class ControlesDAOServlet extends HttpServlet {
             liste_secteurs.add(secteuractiviteDAO.findById(25));
             //OffreEmploi offre_test = new OffreEmploi(datedepot, "OFFRE DE FOUMALADE", "INGENIEUR TROP FORT",
             //      "HACKER LA NASA", entrepriseDAO.findById(2), niveauqualificationDAO.findById(4), liste_secteurs);
-            OffreEmploi offre_test = new OffreEmploi("Ingénieur trop fort", "Hacker la NASA", "Bac+1000", niveauqualificationDAO.findById(1), datedepot, entrepriseDAO.findById(1),
-                    liste_secteurs);
+            //OffreEmploi offre_test = new OffreEmploi("Ingénieur trop fort", "Hacker la NASA", "Bac+1000", niveauqualificationDAO.findById(1), datedepot, entrepriseDAO.findById(1),
+            //        liste_secteurs);
+            OffreEmploi offre_test = new OffreEmploi("Ingénieur trop fort", "Hacker la NASA", "Bac+1000", niveauqualificationDAO.findById(1), datedepot, entrepriseDAO.findById(1));
             OffreEmploi offre_recup = null;
             int id_oe = 0;
             out.println("Ajout de l'offreemploi de test");
@@ -889,7 +921,7 @@ public class ControlesDAOServlet extends HttpServlet {
         try {
             for (int i = 1; i <= 10; i++) {
                 //(String titre, String descriptif, String profilRecherche, NiveauQualification niveauQualification, Date dateDepot, Entreprise entreprise, Set<SecteurActivite> secteurActivites)
-                offreEmploi = new OffreEmploi("Titre" + i, "Descriptif" + i, "profil_recherche" + i, niveauQualification, dateDepot, entreprise, secteurActivite);
+                offreEmploi = new OffreEmploi("Titre" + i, "Descriptif" + i, "profil_recherche" + i,niveauQualification, dateDepot, entreprise);
                 offreEmploi = offreEmploiDAO.persist(offreEmploi);
                 offreEmploiList.add(offreEmploi);
             }

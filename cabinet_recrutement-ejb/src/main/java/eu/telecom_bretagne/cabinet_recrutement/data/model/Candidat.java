@@ -52,7 +52,8 @@ public class Candidat  implements java.io.Serializable {
        this.messageCandidats = messageCandidats;
     }
 
-    public Candidat(String nom, String prenom, String mail, String adressePostale, String cv, Date datedepot, Date datenaissance, NiveauQualification byId, Set<SecteurActivite> liste_secteurs) {
+    public Candidat(String nom, String prenom, String mail, String adressePostale, String cv, Date datedepot, Date datenaissance,
+                    NiveauQualification byId, Set<SecteurActivite> liste_secteurs) {
         this.nom = nom;
         this.prenom = prenom;
         this.adresseEmail = mail;
