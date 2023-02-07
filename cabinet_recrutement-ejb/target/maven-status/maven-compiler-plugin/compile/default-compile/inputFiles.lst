@@ -1,0 +1,16 @@
+/app/cabinet_recrutement-ejb/src/main/java/eu/telecom_bretagne/cabinet_recrutement/data/model/MessageCandidat.java
+/app/cabinet_recrutement-ejb/src/main/java/eu/telecom_bretagne/cabinet_recrutement/data/model/OffreEmploi.java
+/app/cabinet_recrutement-ejb/src/main/java/eu/telecom_bretagne/cabinet_recrutement/data/model/Candidat.java
+/app/cabinet_recrutement-ejb/src/main/java/eu/telecom_bretagne/cabinet_recrutement/data/dao/SecteurActiviteDAO.java
+/app/cabinet_recrutement-ejb/src/main/java/eu/telecom_bretagne/cabinet_recrutement/data/dao/NiveauQualificationDAO.java
+/app/cabinet_recrutement-ejb/src/main/java/eu/telecom_bretagne/cabinet_recrutement/data/model/SecteurActivite.java
+/app/cabinet_recrutement-ejb/src/main/java/eu/telecom_bretagne/cabinet_recrutement/data/dao/CandidatDAO.java
+/app/cabinet_recrutement-ejb/src/main/java/eu/telecom_bretagne/cabinet_recrutement/data/model/MessageOffreemploi.java
+/app/cabinet_recrutement-ejb/src/main/java/eu/telecom_bretagne/cabinet_recrutement/data/dao/MessageOffreemploiDAO.java
+/app/cabinet_recrutement-ejb/src/main/java/eu/telecom_bretagne/cabinet_recrutement/service/ServiceEntreprise.java
+/app/cabinet_recrutement-ejb/src/main/java/eu/telecom_bretagne/cabinet_recrutement/data/dao/MessageCandidatDAO.java
+/app/cabinet_recrutement-ejb/src/main/java/eu/telecom_bretagne/cabinet_recrutement/service/IServiceEntreprise.java
+/app/cabinet_recrutement-ejb/src/main/java/eu/telecom_bretagne/cabinet_recrutement/data/dao/OffreEmploiDAO.java
+/app/cabinet_recrutement-ejb/src/main/java/eu/telecom_bretagne/cabinet_recrutement/data/model/NiveauQualification.java
+/app/cabinet_recrutement-ejb/src/main/java/eu/telecom_bretagne/cabinet_recrutement/data/model/Entreprise.java
+/app/cabinet_recrutement-ejb/src/main/java/eu/telecom_bretagne/cabinet_recrutement/data/dao/EntrepriseDAO.java

@@ -782,15 +782,7 @@ public class ControlesDAOServlet extends HttpServlet {
             messageoffreemploiDAO.update(moe_recup);
 
             moe_recup = messageoffreemploiDAO.findById(id_moe);
-            if (moe_test.getCorpsMessage() != moe_recup.getCorpsMessage()) {
-                out.println("Modif OK");
-                out.println("Ancien Corps Message : " + moe_test.getCorpsMessage());
-                out.println("Nouveau Corps Message : " + moe_recup.getCorpsMessage());
-            } else {
-                out.println("Modif KO");
-                out.println("Ancien Corps Message : " + moe_test.getCorpsMessage());
-                out.println("Nouveau Corps Message : " + moe_recup.getCorpsMessage());
-            }
+            compare(moe_test.getCorpsMessage(), moe_recup.getCorpsMessage(), cl, "corp message", out);
             out.println();
 
             out.println("Suppression du messageoffredemploi de test");
