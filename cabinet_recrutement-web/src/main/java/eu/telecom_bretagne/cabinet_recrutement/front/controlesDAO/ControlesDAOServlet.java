@@ -834,7 +834,7 @@ public class ControlesDAOServlet extends HttpServlet {
         }
     }
 
-    private List<Entreprise> generateurEntreprise(EntrepriseDAO entrepriseDAO, PrintWriter out) {
+    private LinkedList<Entreprise> generateurEntreprise(EntrepriseDAO entrepriseDAO, PrintWriter out) {
         out.println();
         out.println("[INFO]Création entreprise de références");
         LinkedList<Entreprise> entrepriseList = new LinkedList<Entreprise>();
@@ -842,7 +842,7 @@ public class ControlesDAOServlet extends HttpServlet {
         try {
             for (int i = 1; i <= 10; i++) {
                 entreprise = new Entreprise("Adresse" + i, "Descriptif" + i, "Nom" + i);
-                entrepriseDAO.persist(entreprise);
+                entreprise = entrepriseDAO.persist(entreprise);
                 entrepriseList.add(entreprise);
             }
         } catch (Exception e) {
@@ -861,6 +861,24 @@ public class ControlesDAOServlet extends HttpServlet {
             }
         }
         out.println("[OK]Entrepise supprimées");
+    }
+
+    //-------------PARTIE LAURE-----------------
+    private LinkedList<OffreEmploi> generateurOffre(OffreEmploiDAO offreEmploiDAO, PrintWriter out){
+        out.println();
+        out.println("[INFO]Création d'offres emploi de références");
+        LinkedList<OffreEmploi> offreEmploiList = new LinkedList<OffreEmploi>();
+        OffreEmploi offreEmploi;
+        try {
+            for (int i = 1; i <= 10; i++) {
+                offreEmploi = new OffreEmploi("Adresse" + i, "Descriptif" + i, "Nom" + i);
+                offreEmploi = offreEmploiDAO.persist(offreEmploi);
+                offreEmploiList.add(offreEmploi);
+            }
+        } catch (Exception e) {
+            out.println("[ERROR]Problème lors de la création d'offres emploi de référence");
+        }
+        return offreEmploiList;
     }
 
 
