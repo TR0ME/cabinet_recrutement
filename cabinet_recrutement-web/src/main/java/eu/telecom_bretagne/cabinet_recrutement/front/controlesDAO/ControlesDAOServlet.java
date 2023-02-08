@@ -581,7 +581,7 @@ public class ControlesDAOServlet extends HttpServlet {
 
             id_oe = offre_test.getIdOffre();
             offre_recup = offreemploiDAO.findById(id_oe);
-            //TODO On a un pb ic sur les relations des objets
+            //TODO On a un pb ici sur les relations des objets
             /*out.println("------------------------------");
             out.println("offre de test : ");
             out.println("ID:"+offre_test.getIdOffre());
@@ -649,7 +649,7 @@ public class ControlesDAOServlet extends HttpServlet {
             out.println();
         } catch (Exception e3) {
             out.println("[ERROR]Lors de la création/modification/suppresion de l'offre emploi de test");
-            e3.printStackTrace();
+            e3.printStackTrace(out);
         }
         out.println();
 
