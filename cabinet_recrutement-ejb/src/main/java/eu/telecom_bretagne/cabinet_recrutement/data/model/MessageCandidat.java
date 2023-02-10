@@ -57,7 +57,7 @@ public class MessageCandidat  implements java.io.Serializable {
         this.idMessageCandidat = idMessageCandidat;
     }
 
-@ManyToOne(fetch=FetchType.LAZY)
+@ManyToOne(fetch=FetchType.EAGER)
     @JoinColumn(name="no_candidat")
     public Candidat getCandidat() {
         return this.candidat;
@@ -67,7 +67,7 @@ public class MessageCandidat  implements java.io.Serializable {
         this.candidat = candidat;
     }
 
-@ManyToOne(fetch=FetchType.LAZY)
+@ManyToOne(fetch=FetchType.EAGER)
     @JoinColumn(name="no_offre")
     public OffreEmploi getOffreEmploi() {
         return this.offreEmploi;

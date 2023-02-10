@@ -99,10 +99,14 @@ public class ControlesDAOServlet extends HttpServlet {
         // Contrôle(s) de fonctionnalités.
         //Affichage des entreprises
         out.println("[INFO]Liste des entreprises :");
-        List<Entreprise> entreprises = entrepriseDAO.findAll();
+        try {
+            List<Entreprise> entreprises = entrepriseDAO.findAll();
 
-        for (Entreprise entreprise : entreprises) {
-            out.println(entreprise.getNom());
+            for (Entreprise entreprise : entreprises) {
+                out.println(entreprise.getNom());
+            }
+        }catch(Exception e ){
+            out.println("[ERROR]pour le findall de entreprise");
         }
         out.println();
         try {
@@ -532,7 +536,7 @@ public class ControlesDAOServlet extends HttpServlet {
             out.println("Obtention de l'offre n° 1 :");
             OffreEmploi of = offreemploiDAO.findById(1);
             out.println("Id : " + of.getIdOffre());
-            out.println("Entreprise : " + of.getNoEntreprise());
+            out.println("Entreprise : " + of.getEntreprise());
             out.println("Descriptif Mission : " + of.getDescriptif());
             out.println("Profil Recherche : " + of.getProfilRecherche());
             //out.println("Niveau Qualification : " + of.getNiveauQualification().getIntituleQualification());
@@ -542,7 +546,7 @@ public class ControlesDAOServlet extends HttpServlet {
             out.println("Obtention de l'offre n° 2 :");
             of = offreemploiDAO.findById(2);
             out.println("Id : " + of.getIdOffre());
-            out.println("Entreprise : " + of.getNoEntreprise());
+            out.println("Entreprise : " + of.getEntreprise());
             out.println("Descriptif Mission : " + of.getDescriptif());
             out.println("Profil Recherche : " + of.getProfilRecherche());
             //out.println("Niveau Qualification : " + of.getNiveauQualification().getIntituleQualification());
@@ -552,7 +556,7 @@ public class ControlesDAOServlet extends HttpServlet {
             out.println("Obtention de l'offre n° 3 :");
             of = offreemploiDAO.findById(3);
             out.println("Id : " + of.getIdOffre());
-            out.println("Entreprise : " + of.getNoEntreprise());
+            out.println("Entreprise : " + of.getEntreprise());
             out.println("Descriptif Mission : " + of.getDescriptif());
             out.println("Profil Recherche : " + of.getProfilRecherche());
             //out.println("Niveau Qualification : " + of.getNiveauQualification().getIntituleQualification());
@@ -594,7 +598,7 @@ public class ControlesDAOServlet extends HttpServlet {
                     && (offre_test.getTitre().equals(offre_recup.getTitre()))
                     && (offre_test.getProfilRecherche().equals(offre_recup.getProfilRecherche()))
                     && (offre_test.getDateDepot().equals(offre_recup.getDateDepot()))
-                    && (offre_test.getNoEntreprise().getId() == offre_recup.getNoEntreprise().getId())
+                    && (offre_test.getEntreprise().getId() == offre_recup.getEntreprise().getId())
                     && (offre_test.getNiveauQualification().getIdQualification() == offre_recup.getNiveauQualification().getIdQualification())) {
                 out.println("[OK]Ajout et Recup");
             } else {
@@ -850,6 +854,18 @@ public class ControlesDAOServlet extends HttpServlet {
         }
 
         out.println("-----------------------------------------------------------------------------");
+        out.println("Clean des insersions dans la BDD");
+        try{
+            cleanEntreprise(entrepriseLinkedList, out, entrepriseDAO);
+            cleanCandidat(candidatLinkedList, out, candidatDAO);
+            cleanMessageCandidat(messageCandidatLinkedList, out, messagecandidatDAO);
+            cleanOffreEmploi(offreEmploiLinkedList, out, offreemploiDAO);
+            cleanMessageOffreemploi(messageOffreemploiLinkedList,messageoffreemploiDAO, out);
+            cleanNiveauQualification(niveauQualificationLinkedList, out, niveauqualificationDAO);
+            cleanSecteurActivite(secteurActiviteLinkedList, out, secteuractiviteDAO);
+        }catch (Exception e){
+            out.println("[ERROR] lors de la suppression de la bdd de référence");
+        }
 
 
         //Fin du void service
@@ -884,7 +900,7 @@ public class ControlesDAOServlet extends HttpServlet {
         LinkedList<Entreprise> entrepriseList = new LinkedList<Entreprise>();
         Entreprise entreprise;
         try {
-            for (int i = 1; i <= 10; i++) {
+            for (int i = 1; i <= 4; i++) {
                 entreprise = new Entreprise("Adresse" + i, "Descriptif" + i, "Nom" + i);
                 entreprise = entrepriseDAO.persist(entreprise);
                 entrepriseList.add(entreprise);
@@ -925,7 +941,7 @@ public class ControlesDAOServlet extends HttpServlet {
 
         //Début "vraie" méthode start OffreEmploi
         try {
-            for (int i = 1; i <= 10; i++) {
+            for (int i = 1; i <= 4; i++) {
                 //(String titre, String descriptif, String profilRecherche, NiveauQualification niveauQualification, Date dateDepot, Entreprise entreprise, Set<SecteurActivite> secteurActivites)
                 offreEmploi = new OffreEmploi("Titre" + i, "Descriptif" + i, "profil_recherche" + i, niveauQualification, dateDepot, entreprise);
                 offreEmploi = offreEmploiDAO.persist(offreEmploi);
@@ -958,7 +974,7 @@ public class ControlesDAOServlet extends HttpServlet {
         LinkedList<SecteurActivite> secteurActiviteList = new LinkedList<SecteurActivite>();
         SecteurActivite secteurActivite;
         try {
-            for (int i = 1; i <= 10; i++) {
+            for (int i = 1; i <= 4; i++) {
                 //(int idSecteur, String intituleActivite, Set<Candidat> candidats, Set<OffreEmploi> offreEmplois)
                 secteurActivite = new SecteurActivite("IntituleActivite" + i);
                 secteurActivite = secteurActiviteDAO.persist(secteurActivite);
@@ -1035,7 +1051,7 @@ public class ControlesDAOServlet extends HttpServlet {
         }
 
         try {
-            for (int i = 1; i <= 10; i++) {
+            for (int i = 1; i <= 4; i++) {
                 //variables du constructeur :
                 //(String nom, String prenom, String mail, String adressePostale, String cv, Date datedepot,
                 // Date datenaissance, NiveauQualification byId, Set<SecteurActivite> liste_secteurs)
@@ -1080,7 +1096,7 @@ public class ControlesDAOServlet extends HttpServlet {
         }
 
         try {
-            for (int i = 1; i <= 10; i++) {
+            for (int i = 1; i <= 4; i++) {
 
                 //affichage constructeur :
                 //(int idMessageCandidat, Candidat candidat, OffreEmploi offreEmploi, Date dateEnvoi, String corpsMessage
@@ -1123,7 +1139,7 @@ public class ControlesDAOServlet extends HttpServlet {
         }
 
         try {
-            for (int i = 1; i <= 10; i++) {
+            for (int i = 1; i <= 4; i++) {
 
                 //affichage constructeur :
                 //(Candidat byId, OffreEmploi byId1, String corpsMessage, Date dateenvoi)

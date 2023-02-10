@@ -24,6 +24,7 @@ public class OffreEmploi  implements java.io.Serializable {
      private String profilRecherche;
      private Date dateDepot;
      //private Integer noEntreprise;
+
     private Entreprise entreprise;
      private Set<MessageCandidat> messageCandidats = new HashSet<MessageCandidat>(0);
      private Set<MessageOffreemploi> messageOffreemplois = new HashSet<MessageOffreemploi>(0);
@@ -71,7 +72,7 @@ public class OffreEmploi  implements java.io.Serializable {
         this.idOffre = idOffre;
     }
 
-@ManyToOne(fetch=FetchType.LAZY)
+@ManyToOne(fetch=FetchType.EAGER)
     @JoinColumn(name="no_qualification")
     public NiveauQualification getNiveauQualification() {
         return this.niveauQualification;
@@ -121,17 +122,17 @@ public class OffreEmploi  implements java.io.Serializable {
         this.dateDepot = dateDepot;
     }
 
-    
-    @Column(name="no_entreprise")
-    public Entreprise getNoEntreprise() {
+    @ManyToOne
+    @JoinColumn(name = "id_entreprise")
+    public Entreprise getEntreprise() {
         return this.entreprise;
     }
     
-    public void setNoEntreprise(Entreprise entreprise) {
+    public void setEntreprise(Entreprise entreprise) {
         this.entreprise = entreprise;
     }
 
-@OneToMany(fetch=FetchType.LAZY, mappedBy="offreEmploi")
+@OneToMany(fetch=FetchType.EAGER, mappedBy="offreEmploi")
     public Set<MessageCandidat> getMessageCandidats() {
         return this.messageCandidats;
     }
@@ -140,7 +141,7 @@ public class OffreEmploi  implements java.io.Serializable {
         this.messageCandidats = messageCandidats;
     }
 
-@OneToMany(fetch=FetchType.LAZY, mappedBy="offreEmploi")
+@OneToMany(fetch=FetchType.EAGER, mappedBy="offreEmploi")
     public Set<MessageOffreemploi> getMessageOffreemplois() {
         return this.messageOffreemplois;
     }
@@ -149,7 +150,7 @@ public class OffreEmploi  implements java.io.Serializable {
         this.messageOffreemplois = messageOffreemplois;
     }
 
-@ManyToMany(fetch=FetchType.LAZY)
+@ManyToMany(fetch=FetchType.EAGER)
     @JoinTable(name="secteur_offre", schema="public", joinColumns = { 
         @JoinColumn(name="no_offre", nullable=false, updatable=false) }, inverseJoinColumns = { 
         @JoinColumn(name="no_secteur", nullable=false, updatable=false) })

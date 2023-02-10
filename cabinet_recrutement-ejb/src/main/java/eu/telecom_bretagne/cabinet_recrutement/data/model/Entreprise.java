@@ -1,6 +1,8 @@
 package eu.telecom_bretagne.cabinet_recrutement.data.model;
 
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 // import javax.persistence.*;
 import jakarta.persistence.*;
 
@@ -25,6 +27,8 @@ public class Entreprise implements Serializable {
   private String descriptif;
 
   private String nom;
+  @OneToMany(mappedBy = "entreprise", fetch = FetchType.EAGER)
+  private Set<OffreEmploi> offreEmploi = new HashSet<OffreEmploi>(0);
 
   public Entreprise() {
   }
@@ -67,6 +71,26 @@ public class Entreprise implements Serializable {
     this.nom = nom;
   }
 
+  public Set<OffreEmploi> getOffreEmploi(){
+    return this.offreEmploi;
+  }
+
+  public void setOffreEmploi(Set<OffreEmploi> offreEmploi){
+    this.offreEmploi = offreEmploi;
+  }
+
+  public OffreEmploi addOffreEmploi(OffreEmploi offreEmploi){
+    getOffreEmploi().add(offreEmploi);
+    offreEmploi.setEntreprise(this);
+    return offreEmploi;
+  }
+
+  public OffreEmploi removeOffreEmploi(OffreEmploi offreEmploi){
+    getOffreEmploi().remove(offreEmploi);
+    offreEmploi.setEntreprise(this);
+
+    return offreEmploi;
+  }
   @Override
   public String toString()
   {
