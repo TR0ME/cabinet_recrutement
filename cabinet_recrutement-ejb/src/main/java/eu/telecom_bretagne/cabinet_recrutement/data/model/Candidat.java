@@ -156,7 +156,7 @@ public class Candidat  implements java.io.Serializable {
         this.dateDepot = dateDepot;
     }
 
-@ManyToMany(fetch=FetchType.LAZY)
+@ManyToMany(fetch=FetchType.EAGER)
     @JoinTable(name="secteur_candidat", schema="public", joinColumns = { 
         @JoinColumn(name="no_candidat", nullable=false, updatable=false) }, inverseJoinColumns = { 
         @JoinColumn(name="no_secteur", nullable=false, updatable=false) })
@@ -168,7 +168,7 @@ public class Candidat  implements java.io.Serializable {
         this.secteurActivites = secteurActivites;
     }
 
-@OneToMany(fetch=FetchType.LAZY, mappedBy="candidat")
+@OneToMany(fetch=FetchType.EAGER, mappedBy="candidat")
     public Set<MessageOffreemploi> getMessageOffreemplois() {
         return this.messageOffreemplois;
     }
@@ -177,7 +177,7 @@ public class Candidat  implements java.io.Serializable {
         this.messageOffreemplois = messageOffreemplois;
     }
 
-@OneToMany(fetch=FetchType.LAZY, mappedBy="candidat")
+@OneToMany(fetch=FetchType.EAGER, mappedBy="candidat")
     public Set<MessageCandidat> getMessageCandidats() {
         return this.messageCandidats;
     }

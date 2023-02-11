@@ -317,23 +317,22 @@ public class ControlesDAOServlet extends HttpServlet {
             ifosuppr(cl, out);
             secteuractiviteDAO.remove(sa_recup);
             testSupression(secteuractiviteDAO.findById(idTest), cl, "supprimer", out);
+            //TODO problème ici, manque EAGER dans SA. Mais pas possible de le rajouter car ça plante
             /*try {
                 out.println("----------------->test ajout en cascade");
                 SecteurActivite s = secteuractiviteDAO.findById(1);
                 CandidatDAO candidatDAO2 = (CandidatDAO) ServicesLocator.getInstance().getRemoteInterface("CandidatDAO");
-                Candidat c = candidatDAO2.findById(5);
+                Candidat c = candidatDAO2.findById(1);
 
                 out.println();
                 out.println(s.toStringShort());
                 out.println(c.toStringShort());
                 out.println();
 //TODO pb ici ?
-                s.addCandidat(c);
-                /*Set<Candidat> setCand = s.getCandidats();
+  /*              s.addCandidat(c);
+                Set<Candidat> setCand = s.getCandidats();
                 setCand.add(c);
-                s.setCandidats(setCand);*/
-/*
-/*
+                s.setCandidats(setCand);
                 secteuractiviteDAO.update(s);
                 out.println("[OK]update du secteur");
                 c.getSecteurActivites().add(s);
@@ -345,6 +344,7 @@ public class ControlesDAOServlet extends HttpServlet {
             }*/
         } catch (Exception e) {
             out.println("[ERROR]lors de la création/Ajout/Suppression d'un secteur activite");
+            e.printStackTrace(out);
         }
 
 
@@ -461,13 +461,13 @@ public class ControlesDAOServlet extends HttpServlet {
             out.println("End");
             out.println(cand_recup.toStringShort());
 
-            /*out.println("[INFO]Liste des Secteurs Activites du candidat de test : ");
+            out.println("[INFO]Liste des Secteurs Activites du candidat de test : ");
             liste_secteurs = cand_recup.getSecteurActivites();
             for (SecteurActivite secteurs_recup : liste_secteurs) {
                 out.println(secteurs_recup.toStringShort());
                 //out.println(secteurs_recup.g);
             }
-            out.println();*/
+            out.println();
 
 
             out.println("[INFO]Modification de la candidature de test");
@@ -632,7 +632,7 @@ public class ControlesDAOServlet extends HttpServlet {
             compare(offre_test.getTitre(), offre_recup.getTitre(), cl, methode, out);
             out.println();
 
-            out.println("[INFO]Affichage par Secteur Activité et Niveau Qualif (Informatique et Bac+4) ");
+            out.println("[INFO]Affichage par Secteur Activité et Niveau Qualif ");
             List<OffreEmploi> list_test = offreemploiDAO.findBySecteurActiviteAndNiveauQualification(1, 1);
             for (OffreEmploi offreemploi : list_test) {
                 out.println(offreemploi.getTitre());
@@ -856,13 +856,13 @@ public class ControlesDAOServlet extends HttpServlet {
         out.println("-----------------------------------------------------------------------------");
         out.println("Clean des insersions dans la BDD");
         try{
-            cleanEntreprise(entrepriseLinkedList, out, entrepriseDAO);
-            cleanCandidat(candidatLinkedList, out, candidatDAO);
+            cleanMessageOffreemploi(messageOffreemploiLinkedList,messageoffreemploiDAO, out);
             cleanMessageCandidat(messageCandidatLinkedList, out, messagecandidatDAO);
             cleanOffreEmploi(offreEmploiLinkedList, out, offreemploiDAO);
-            cleanMessageOffreemploi(messageOffreemploiLinkedList,messageoffreemploiDAO, out);
+            cleanCandidat(candidatLinkedList, out, candidatDAO);
             cleanNiveauQualification(niveauQualificationLinkedList, out, niveauqualificationDAO);
             cleanSecteurActivite(secteurActiviteLinkedList, out, secteuractiviteDAO);
+            cleanEntreprise(entrepriseLinkedList, out, entrepriseDAO);
         }catch (Exception e){
             out.println("[ERROR] lors de la suppression de la bdd de référence");
         }
@@ -918,6 +918,7 @@ public class ControlesDAOServlet extends HttpServlet {
                 entrepriseDAO.remove(entreprise);
             } catch (Exception e) {
                 out.println("[ERROR]Lors de la suppression des entreprises : " + entreprise.toString());
+                e.printStackTrace(out);
             }
         }
         out.println("[OK]Entrepise supprimées");
@@ -992,7 +993,7 @@ public class ControlesDAOServlet extends HttpServlet {
             try {
                 secteurActiviteDAO.remove(secteurActivite);
             } catch (Exception e) {
-                out.println("[ERROR]Lors de la suppression des secteurs d'activité : " + secteurActivite.toString());
+                out.println("[ERROR]Lors de la suppression des secteurs d'activité : " + secteurActivite.toStringShort());
             }
         }
         out.println("[OK]SecteurActivite supprimées");
@@ -1024,7 +1025,7 @@ public class ControlesDAOServlet extends HttpServlet {
             try {
                 niveauQualificationDAO.remove(niveauQualification);
             } catch (Exception e) {
-                out.println("[ERROR]Lors de la suppression des niveaux de qualification : " + niveauQualification.toString());
+                out.println("[ERROR]Lors de la suppression des niveaux de qualification : " + niveauQualification.toStringShort());
             }
         }
         out.println("[OK]NiveauQualification supprimées");
@@ -1071,7 +1072,7 @@ public class ControlesDAOServlet extends HttpServlet {
             try {
                 candidatDAO.remove(candidat);
             } catch (Exception e) {
-                out.println("[ERROR]Lors de la suppression des candidat : " + candidat.toString());
+                out.println("[ERROR]Lors de la suppression des candidat : " + candidat.toStringShort());
             }
         }
         out.println("[OK]Candidat supprimées");
