@@ -92,6 +92,13 @@ public class NiveauQualification  implements java.io.Serializable {
         return "NiveauQualification[idQualification="+this.idQualification+", IntituleQualification="+this.intituleQualification+"]";
     }
 
+    public Candidat removeCandidat(Candidat candidature) {
+        getCandidats().remove(candidature);
+        candidature.setNiveauQualification(null);
+
+        return candidature;
+    }
+
 
 
 }

@@ -167,6 +167,19 @@ public class OffreEmploi  implements java.io.Serializable {
         return "OffreEmploi[Titre="+this.titre+", descriptif="+this.descriptif+", descriptif="+this.descriptif+"]";
     }
 
+    public MessageCandidat removeMessageCandidat(MessageCandidat messageCandidat) {
+        getMessageCandidats().remove(messageCandidat);
+        messageCandidat.setOffreEmploi(null);
+
+        return messageCandidat;
+    }
+
+    public MessageOffreemploi removeMessageOffredemploi(MessageOffreemploi messageOffreemploi) {
+        getMessageOffreemplois().remove(messageOffreemploi);
+        messageOffreemploi.setOffreEmploi(null);
+
+        return messageOffreemploi;
+    }
 
 }
 
