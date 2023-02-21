@@ -191,6 +191,7 @@ public class ServiceCandidat extends ServicesGlobal implements IServiceCandidat 
 
             System.out.println("--------suppression candidature kassé");
             System.out.println(e);
+            //Hello
         }
 
     }
